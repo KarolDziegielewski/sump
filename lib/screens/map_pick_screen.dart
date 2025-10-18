@@ -1,6 +1,10 @@
+import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:xml/xml.dart' as xml;
 
 class MapPickScreen extends StatefulWidget {
   const MapPickScreen({super.key});
@@ -10,17 +14,23 @@ class MapPickScreen extends StatefulWidget {
 }
 
 class _MapPickScreenState extends State<MapPickScreen> {
+  // Ścieżki KML z Twojej wiadomości:
+  static const _kmlBusStops = 'assets/data/sump/highway_busstop_sump_osm.kml';
+  static const _kmlBikeStations =
+      'assets/data/PRM stacje roweru miejskiego.kml';
+
+  final MapController _map = MapController();
   LatLng? _start;
   LatLng? _end;
 
-  void _onTap(TapPosition _, LatLng latlng) {
+  void _onTap(TapPosition tapPosition, LatLng latlng) {
     setState(() {
       if (_start == null) {
         _start = latlng;
       } else if (_end == null) {
         _end = latlng;
       } else {
-        // trzecie i kolejne stuknięcia podmieniają bliższy punkt
+        // trzecie stuknięcie – podmieniamy bliższy punkt
         final d = const Distance();
         final ds = d(_start!, latlng);
         final de = d(_end!, latlng);
@@ -31,9 +41,13 @@ class _MapPickScreenState extends State<MapPickScreen> {
         }
       }
     });
+    _replan();
   }
 
-  void _clear() => setState(() { _start = null; _end = null; });
+  void _clear() => setState(() {
+        _start = null;
+        _end = null;
+      });
 
   void _confirm() {
     if (_start != null && _end != null) {
@@ -43,23 +57,36 @@ class _MapPickScreenState extends State<MapPickScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const plock = LatLng(52.5468, 19.7064);
+    const plockCenter = LatLng(52.5468, 19.7064);
 
     final markers = <Marker>[
       if (_start != null)
-        Marker(point: _start!, width: 40, height: 40, child: const Icon(Icons.flag, size: 36)),
+        Marker(
+            point: _start!,
+            width: 40,
+            height: 40,
+            child: const Icon(Icons.flag, size: 36)),
       if (_end != null)
-        Marker(point: _end!, width: 40, height: 40, child: const Icon(Icons.place, size: 36)),
+        Marker(
+            point: _end!,
+            width: 40,
+            height: 40,
+            child: const Icon(Icons.place, size: 36)),
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wybierz start i cel'),
-        actions: [IconButton(onPressed: _clear, icon: const Icon(Icons.clear_all), tooltip: 'Wyczyść')],
+        actions: [
+          IconButton(
+              onPressed: _clear,
+              icon: const Icon(Icons.clear_all),
+              tooltip: 'Wyczyść'),
+        ],
       ),
       body: FlutterMap(
         options: MapOptions(
-          initialCenter: plock,
+          initialCenter: plockCenter,
           initialZoom: 13,
           onTap: _onTap,
         ),
@@ -69,10 +96,6 @@ class _MapPickScreenState extends State<MapPickScreen> {
             userAgentPackageName: 'com.example.app',
           ),
           MarkerLayer(markers: markers),
-          if (_start != null && _end != null)
-            PolylineLayer(polylines: [
-              Polyline(points: [_start!, _end!], strokeWidth: 4),
-            ]),
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -81,11 +104,10 @@ class _MapPickScreenState extends State<MapPickScreen> {
           child: ElevatedButton.icon(
             onPressed: (_start != null && _end != null) ? _confirm : null,
             icon: const Icon(Icons.check),
-            label: const Text('Zatwierdź'),
+            label: const Text('Zatwierdź punkty A i B'),
           ),
         ),
       ),
     );
   }
 }
-
