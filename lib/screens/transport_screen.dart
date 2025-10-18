@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
+import 'map_pick_screen.dart';
 
 class TransportScreen extends StatefulWidget {
   const TransportScreen({super.key});
@@ -18,6 +20,28 @@ class _TransportScreenState extends State<TransportScreen> {
     super.dispose();
   }
 
+  Future<void> _openMapPicker() async {
+    final result = await Navigator.push<Map<String, LatLng?>>(
+      context,
+      MaterialPageRoute(builder: (_) => const MapPickScreen()),
+    );
+
+    if (!mounted || result == null) return;
+
+    final start = result['start'];
+    final end = result['end'];
+    setState(() {
+      if (start != null) {
+        _startCtrl.text =
+            '${start.latitude.toStringAsFixed(6)}, ${start.longitude.toStringAsFixed(6)}';
+      }
+      if (end != null) {
+        _endCtrl.text =
+            '${end.latitude.toStringAsFixed(6)}, ${end.longitude.toStringAsFixed(6)}';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,16 +49,13 @@ class _TransportScreenState extends State<TransportScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const SizedBox(height: 8),
             TextField(
               controller: _startCtrl,
               textInputAction: TextInputAction.next,
-              autofocus: true,
               decoration: const InputDecoration(
                 labelText: 'Punkt startowy',
-                hintText: 'Np. Stary Rynek 1, Płock',
+                hintText: 'Adres lub współrzędne',
                 prefixIcon: Icon(Icons.my_location),
                 border: OutlineInputBorder(),
               ),
@@ -45,9 +66,18 @@ class _TransportScreenState extends State<TransportScreen> {
               textInputAction: TextInputAction.done,
               decoration: const InputDecoration(
                 labelText: 'Punkt docelowy',
-                hintText: 'Np. Dworzec PKP Płock',
+                hintText: 'Adres lub współrzędne',
                 prefixIcon: Icon(Icons.location_on),
                 border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _openMapPicker,
+                icon: const Icon(Icons.map),
+                label: const Text('Wybierz na mapie'),
               ),
             ),
           ],
