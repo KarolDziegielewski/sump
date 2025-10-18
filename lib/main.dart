@@ -16,12 +16,14 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.light),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.light),
         textTheme: Typography.blackCupertino,
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.dark),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: seed, brightness: Brightness.dark),
         textTheme: Typography.whiteCupertino,
       ),
       home: const HomeScreen(),
