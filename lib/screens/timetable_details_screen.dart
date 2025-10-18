@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../data/timetables.dart';
+import '../data/timetables.dart'; // ← źródło typu Timetable/StopSchedule
 
 class TimetableDetailsScreen extends StatefulWidget {
   final Timetable timetable;
   const TimetableDetailsScreen({super.key, required this.timetable});
+  // ...reszta pliku bez zmian
 
   @override
   State<TimetableDetailsScreen> createState() => _TimetableDetailsScreenState();

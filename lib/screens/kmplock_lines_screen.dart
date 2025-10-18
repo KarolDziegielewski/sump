@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/km_timetables.dart'; // ⬅️ nowy import
+import '../data/km_timetables.dart'; // ← tu jest kmTimetables
 import 'timetable_details_screen.dart';
 
 class KmplockLinesScreen extends StatelessWidget {
@@ -10,7 +10,6 @@ class KmplockLinesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final q = query.trim().toLowerCase();
 
-    // Filtruj po numerze linii lub nazwie operatora
     final filtered = q.isEmpty
         ? kmTimetables
         : kmTimetables
@@ -40,8 +39,7 @@ class KmplockLinesScreen extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
-                color: Theme.of(context).colorScheme.outlineVariant,
-              ),
+                  color: Theme.of(context).colorScheme.outlineVariant),
             ),
             child: ListTile(
               leading: const Icon(Icons.directions_bus),

@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import '../data/timetables.dart';
-// Ekrany szczegółów i zakładek
-import 'timetable_details_screen.dart';
 import 'kmplock_lines_screen.dart';
 import 'municipal_lines_screen.dart';
 
 class BusTimetableScreen extends StatefulWidget {
   const BusTimetableScreen({super.key});
-
   @override
   State<BusTimetableScreen> createState() => _BusTimetableScreenState();
 }
@@ -32,13 +28,12 @@ class _BusTimetableScreenState extends State<BusTimetableScreen> {
           bottom: const TabBar(
             tabs: [
               Tab(text: 'autobusy kmpłock'),
-              Tab(text: 'autobusy miejskie'),
+              Tab(text: 'przewoźnicy prywatni'),
             ],
           ),
         ),
         body: Column(
           children: [
-            // wspólny pasek wyszukiwania
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: TextField(
@@ -46,8 +41,7 @@ class _BusTimetableScreenState extends State<BusTimetableScreen> {
                 textInputAction: TextInputAction.search,
                 onChanged: (v) => setState(() => _query = v.trim()),
                 decoration: InputDecoration(
-                  hintText:
-                      'Szukaj numeru autobusu lub operatora (np. 19, A, N3)',
+                  hintText: 'Szukaj numeru autobusu lub operatora…',
                   prefixIcon: const Icon(Icons.search),
                   suffixIcon: _qCtrl.text.isEmpty
                       ? null
@@ -66,9 +60,7 @@ class _BusTimetableScreenState extends State<BusTimetableScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  // 1) KM Płock
                   KmplockLinesScreen(query: _query),
-                  // 2) Pozostałe autobusy miejskie (nie KM Płock)
                   MunicipalLinesScreen(query: _query),
                 ],
               ),

@@ -8,7 +8,9 @@ class MunicipalLinesScreen extends StatelessWidget {
 
   bool _isKmplock(String op) {
     final o = op.toLowerCase();
-    return o.contains('kmpłock') || o.contains('km płock');
+    return o.contains('kmpłock') ||
+        o.contains('km płock') ||
+        o.contains('km plock');
   }
 
   @override
