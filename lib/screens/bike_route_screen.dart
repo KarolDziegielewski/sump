@@ -17,6 +17,9 @@ class _BikeRouteScreenState extends State<BikeRouteScreen> {
   static const String _kmlAssetPath =
       'assets/data/PRM stacje roweru miejskiego.kml';
 
+  // ⬇️ ŚCIEŻKA DO GRAFIKI NA GUZIKU — podmień na swoją nazwę pliku w assets
+  static const String _cornerButtonImage = 'assets/images/logo_r.png';
+
   final MapController _mapController = MapController();
   final List<Marker> _markers = [];
   bool _loading = true;
@@ -164,16 +167,21 @@ class _BikeRouteScreenState extends State<BikeRouteScreen> {
                 retinaMode: MediaQuery.of(context).devicePixelRatio > 1.6,
               ),
               MarkerLayer(markers: _markers),
-              RichAttributionWidget(
-                attributions: const [
-                  TextSourceAttribution(
-                    '© OpenStreetMap contributors',
-                    onTap: null,
-                  ),
+              const RichAttributionWidget(
+                attributions: [
+                  TextSourceAttribution('© OpenStreetMap contributors'),
                 ],
               ),
             ],
           ),
+
+          // ⬇️ Lewy dolny róg — przycisk bez akcji z Twoją grafiką
+          Positioned(
+            left: 16,
+            bottom: 16,
+            child: _CornerGraphicButton(imageAssetPath: _cornerButtonImage),
+          ),
+
           if (_loading)
             const Positioned.fill(
               child: ColoredBox(
@@ -185,7 +193,7 @@ class _BikeRouteScreenState extends State<BikeRouteScreen> {
             Positioned(
               left: 16,
               right: 16,
-              bottom: 16,
+              bottom: 16 + 72, // lekko wyżej, by nie nachodził na guzik
               child: Material(
                 color: Theme.of(context).colorScheme.errorContainer,
                 borderRadius: BorderRadius.circular(12),
@@ -209,6 +217,37 @@ class _BikeRouteScreenState extends State<BikeRouteScreen> {
               onPressed: _fitToAllMarkers,
             )
           : null,
+    );
+  }
+}
+
+class _CornerGraphicButton extends StatelessWidget {
+  final String imageAssetPath;
+  const _CornerGraphicButton({required this.imageAssetPath});
+
+  @override
+  Widget build(BuildContext context) {
+    // Brak funkcji — to tylko „martwy” guzik/grafika
+    return Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(16),
+      clipBehavior: Clip.antiAlias,
+      color: Colors.white.withOpacity(0.9),
+      child: InkWell(
+        // onTap zostawiamy pusty — brak akcji
+        onTap: () {},
+        child: SizedBox(
+          width: 64,
+          height: 64,
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Image.asset(
+              imageAssetPath,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
