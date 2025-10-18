@@ -13,7 +13,8 @@ dependencies:
   latlong2: ^0.9.0
   cupertino_icons: ^1.0.8
   xml: ^6.5.0
-
+  collection: ^1.18.0
+  http: ^1.2.0
 
 
 dev_dependencies:
@@ -25,3 +26,5 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/
+    - assets/data/sump/
+    - assets/data/sump/kmplock/
