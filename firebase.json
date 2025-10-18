@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      { "source": "data/timetables.json",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=300" }] },
+      { "source": "data/kml/**",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] },
+      { "source": "data/meta/**",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=60" }] }
+    ]
+  }
+}

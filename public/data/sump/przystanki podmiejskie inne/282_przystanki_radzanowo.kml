@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="282_przystanki_radzanowo" id="282_przystanki_radzanowo">
+	<SimpleField name="ogc_fid" type="float"></SimpleField>
+	<SimpleField name="gml_id" type="string"></SimpleField>
+	<SimpleField name="lokalnyid" type="string"></SimpleField>
+	<SimpleField name="przestrzen" type="string"></SimpleField>
+	<SimpleField name="wersjaid" type="string"></SimpleField>
+	<SimpleField name="czyobiektb" type="string"></SimpleField>
+	<SimpleField name="x_kod" type="string"></SimpleField>
+	<SimpleField name="x_skrkarto" type="string"></SimpleField>
+	<SimpleField name="x_katdoklg" type="string"></SimpleField>
+	<SimpleField name="x_doklgeom" type="float"></SimpleField>
+	<SimpleField name="x_zrodloda" type="string"></SimpleField>
+	<SimpleField name="x_zrodlo_1" type="string"></SimpleField>
+	<SimpleField name="x_katistni" type="string"></SimpleField>
+	<SimpleField name="x_rodzajre" type="string"></SimpleField>
+	<SimpleField name="x_uwagi" type="string"></SimpleField>
+	<SimpleField name="x_uzytkown" type="string"></SimpleField>
+	<SimpleField name="x_aktualno" type="string"></SimpleField>
+	<SimpleField name="x_aktual_1" type="string"></SimpleField>
+	<SimpleField name="poczatekwe" type="string"></SimpleField>
+	<SimpleField name="koniecwers" type="string"></SimpleField>
+	<SimpleField name="x_datautwo" type="string"></SimpleField>
+	<SimpleField name="x_informdo" type="string"></SimpleField>
+	<SimpleField name="x_kodkarto" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_1" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_2" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_3" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_4" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_5" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_6" type="string"></SimpleField>
+	<SimpleField name="nazwa" type="string"></SimpleField>
+	<SimpleField name="rodzaj" type="string"></SimpleField>
+	<SimpleField name="teryt" type="string"></SimpleField>
+	<SimpleField name="geom_area" type="float"></SimpleField>
+	<SimpleField name="geom_lengt" type="float"></SimpleField>
+	<SimpleField name="KOD10K" type="string"></SimpleField>
+	<SimpleField name="241 Słupn" type="string"></SimpleField>
+	<SimpleField name="kolejnosc" type="float"></SimpleField>
+</Schema>
+<Folder><name>282_przystanki_radzanowo</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572791</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.519_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66D7-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">SZCZYTNO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">19</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8790176057282,52.5497286730004</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572818</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.414_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65BE-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Białkowo</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">17</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8394447853863,52.5488945434153</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572819</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.415_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65BF-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Białkowo</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">16</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8241896027273,52.5516185314886</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572862</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.386_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-6692-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">BORYSZEWO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">7</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7439010385566,52.5540066774126</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">274361128</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.112_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FB3-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Otolińska Boryszewo</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">6</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7339151935253,52.5520249813343</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572800</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.407_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65B7-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">BORYSZEWO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">8</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7542945528281,52.5589206132417</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572787</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.515_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66D3-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">RADZANOWO SKRZ.</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">23</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8896253002949,52.5732095044758</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572789</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.517_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66D5-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Prz</SimpleData>
+		<SimpleData name="x_zrodloda">Trn</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">LASOCIN I</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">22</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8810533415527,52.5659400231532</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572790</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.518_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66D6-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Prz</SimpleData>
+		<SimpleData name="x_zrodloda">Trn</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">LASOCIN II</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">20</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8762306029194,52.5579242257135</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572796</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.403_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65B3-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">ROGOZINO I</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">12</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7960225742223,52.5703664882037</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572798</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.405_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65B5-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">ROGOZINO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">14</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8117327909421,52.5678865741272</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572814</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.409_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65B9-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">BORYSZEWO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">10</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7715001466828,52.5618052307548</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572820</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.416_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65C0-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Włościany</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">15</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8168390779471,52.5628450385958</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572841</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.417_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65C1-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">CHOMĘTOWO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">18</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8348851231191,52.574776846321</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572843</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.419_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65C3-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">WODZYMIN</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">21</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8592333365915,52.5773241477068</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366572844</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.420_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65C4-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">ROGOZINO SKRZ.</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">13</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8118785356088,52.5729892929943</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573051</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.521_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66D9-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Prz</SimpleData>
+		<SimpleData name="x_zrodloda">Trn</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">KOSINO II</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">27</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.9329927810831,52.5554448574846</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573052</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.522_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66DA-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Prz</SimpleData>
+		<SimpleData name="x_zrodloda">Trn</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Radzanowo-Dębniki</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">26</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.9178184496514,52.5601181154595</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573074</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.524_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66DC-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Prz</SimpleData>
+		<SimpleData name="x_zrodloda">Trn</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">DĘBNIKI SKRZYŻOWANIE</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">25</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8965161055544,52.5654706148493</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573075</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.525_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66DD-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Prz</SimpleData>
+		<SimpleData name="x_zrodloda">Trn</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">RADZANOWO SZK.</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">24</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8971157254051,52.5760947132274</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573077</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.527_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-66DF-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">KOSINO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">28</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.9480364650336,52.5529631222407</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573282</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.402_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65B2-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-04-30T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2022/04/30 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">STRÓŻEWKO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">11</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7868480257455,52.5664663896555</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">366573440</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.411_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-65BB-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-11-14T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2022-10-26</SimpleData>
+		<SimpleData name="x_aktual_1">2022-11-14</SimpleData>
+		<SimpleData name="poczatekwe">2022/11/14 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2022-10-26</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">BORYSZEWO</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">9</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7603217533895,52.5599667978634</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">274361015</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.131_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FC6-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Jachowicza Piękna</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="241 Słupn">241</SimpleData>
+		<SimpleData name="kolejnosc">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.6991930398912,52.5480811839609</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">274361050</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.150_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FD9-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Otolińska Word</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7225094702995,52.5496689158845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">274361130</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.114_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FB5-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Lachmana</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">4</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7201737586511,52.5454460939845</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">274361136</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.34_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3F52-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Kobylińkiego Spacerowa</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.6891820957248,52.5498088936557</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#282_przystanki_radzanowo">
+		<SimpleData name="ogc_fid">274361312</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.105_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FAC-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-11-12T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2022-11-12</SimpleData>
+		<SimpleData name="x_aktual_1">2022-11-12</SimpleData>
+		<SimpleData name="poczatekwe">2022/11/12 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Otolińska</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">3</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7126675212621,52.546786871462</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
