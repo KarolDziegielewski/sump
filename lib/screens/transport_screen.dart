@@ -6,7 +6,7 @@ class TransportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Wygodny transport')),
+      appBar: AppBar(title: const Text('Planer Podróży')),
       body: const Center(
         child: Text('Tu pojawi się planer podróży',
             style: TextStyle(fontSize: 18)),
