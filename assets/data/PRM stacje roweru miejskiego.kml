@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="prm__stacje_roweru_miejskiego" id="prm__stacje_roweru_miejskiego">
+	<SimpleField name="Field1" type="string"></SimpleField>
+	<SimpleField name="y" type="float"></SimpleField>
+	<SimpleField name="x" type="float"></SimpleField>
+</Schema>
+<Folder><name>prm__stacje_roweru_miejskiego</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Stary Rynek</SimpleData>
+		<SimpleData name="y">520087.861000</SimpleData>
+		<SimpleData name="x">546487.472300</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.685721,52.544611</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Zalew Sob?tka</SimpleData>
+		<SimpleData name="y">520212.706800</SimpleData>
+		<SimpleData name="x">546083.503900</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.67978,52.545768</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">K. Wielkiego - Dobrzy?ska</SimpleData>
+		<SimpleData name="y">520726.966600</SimpleData>
+		<SimpleData name="x">545707.985400</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.674312,52.550424</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Medyczna - Szpital</SimpleData>
+		<SimpleData name="y">521564.874500</SimpleData>
+		<SimpleData name="x">544301.627000</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.653678,52.558075</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Dobrzy?ska - Ga?czy?skiego</SimpleData>
+		<SimpleData name="y">521521.279600</SimpleData>
+		<SimpleData name="x">545308.938200</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.668534,52.5576</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">?ukasiewicza - Orlen Arena</SimpleData>
+		<SimpleData name="y">521685.977900</SimpleData>
+		<SimpleData name="x">546259.197200</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.682577,52.559001</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">?ukasiewicza - Miodowa</SimpleData>
+		<SimpleData name="y">521182.059000</SimpleData>
+		<SimpleData name="x">546290.670600</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.682971,52.554467</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Tysi?clecia - Nowaka</SimpleData>
+		<SimpleData name="y">521038.765200</SimpleData>
+		<SimpleData name="x">546624.108700</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.68787,52.55315</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Rembieli?skiego - Gawareckiego</SimpleData>
+		<SimpleData name="y">521382.531400</SimpleData>
+		<SimpleData name="x">546928.761000</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.692413,52.556215</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Kobyli?skiego - Bielska</SimpleData>
+		<SimpleData name="y">520684.961400</SimpleData>
+		<SimpleData name="x">546793.432500</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.690318,52.549954</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Jachowicza - Sportowa</SimpleData>
+		<SimpleData name="y">520498.026100</SimpleData>
+		<SimpleData name="x">547452.070700</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.700007,52.548216</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Pi?sudskiego - Otoli?ska</SimpleData>
+		<SimpleData name="y">520261.963700</SimpleData>
+		<SimpleData name="x">548025.277800</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.708428,52.546043</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Pi?sudskiego - Chopina</SimpleData>
+		<SimpleData name="y">520010.727000</SimpleData>
+		<SimpleData name="x">548698.630500</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.718323,52.543724</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Pi?sudskiego - Jeziorowskich</SimpleData>
+		<SimpleData name="y">519701.124300</SimpleData>
+		<SimpleData name="x">549397.799000</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.728589,52.540877</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Chopina - Dworcowa</SimpleData>
+		<SimpleData name="y">520822.095600</SimpleData>
+		<SimpleData name="x">548237.518500</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.71164,52.551061</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Armii Krajowej - Walecznych</SimpleData>
+		<SimpleData name="y">519996.360900</SimpleData>
+		<SimpleData name="x">550839.598700</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.749898,52.543399</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Armii Krajowej - Kutrzeby</SimpleData>
+		<SimpleData name="y">519519.968700</SimpleData>
+		<SimpleData name="x">551712.631800</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7627,52.539033</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Jana Paw?a II - CM Rodzina</SimpleData>
+		<SimpleData name="y">518773.594700</SimpleData>
+		<SimpleData name="x">551423.132600</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.758315,52.532349</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Jana Paw?a II - Paderewskiego</SimpleData>
+		<SimpleData name="y">518576.326900</SimpleData>
+		<SimpleData name="x">550967.545700</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.751567,52.530618</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Sp??dzielcza - Wyszogrodzka</SimpleData>
+		<SimpleData name="y">519536.849000</SimpleData>
+		<SimpleData name="x">548607.263900</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.716906,52.539471</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Kili?skiego - Warszawska</SimpleData>
+		<SimpleData name="y">519355.902300</SimpleData>
+		<SimpleData name="x">547576.321800</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.701676,52.537935</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Kolegialna - Pl. Obr. Warszawy</SimpleData>
+		<SimpleData name="y">519872.449400</SimpleData>
+		<SimpleData name="x">547092.006900</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.694607,52.542622</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Pl. Narutowicza</SimpleData>
+		<SimpleData name="y">519916.241300</SimpleData>
+		<SimpleData name="x">546706.609300</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.688929,52.543049</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Sienkiewicza - Tumska</SimpleData>
+		<SimpleData name="y">520160.743100</SimpleData>
+		<SimpleData name="x">546876.414400</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.691468,52.545233</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Harcerska - ?elazna</SimpleData>
+		<SimpleData name="y">516750.759100</SimpleData>
+		<SimpleData name="x">552154.399100</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.76878,52.51409</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Przemys?owa - NSZ</SimpleData>
+		<SimpleData name="y">521890.534000</SimpleData>
+		<SimpleData name="x">547309.995400</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.69811,52.56075</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">G?rna</SimpleData>
+		<SimpleData name="y">519098.385300</SimpleData>
+		<SimpleData name="x">549144.903300</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.72477,52.53548</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Traktowa - Szpitalna</SimpleData>
+		<SimpleData name="y">521868.001900</SimpleData>
+		<SimpleData name="x">543443.717300</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.64106,52.56087</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">PL Dabrowskiego</SimpleData>
+		<SimpleData name="y">519499.320600</SimpleData>
+		<SimpleData name="x">547308.402100</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.6977453710414,52.5392479953274</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#prm__stacje_roweru_miejskiego">
+		<SimpleData name="Field1">Otolinska - CAS</SimpleData>
+		<SimpleData name="y">520477.849700</SimpleData>
+		<SimpleData name="x">548545.386300</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7161311468012,52.5479381155477</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>

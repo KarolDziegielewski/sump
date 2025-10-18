@@ -1,4 +1,10 @@
+import 'dart:async';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:xml/xml.dart' as xml;
 
 class BikeRouteScreen extends StatefulWidget {
   const BikeRouteScreen({super.key});
@@ -8,100 +14,246 @@ class BikeRouteScreen extends StatefulWidget {
 }
 
 class _BikeRouteScreenState extends State<BikeRouteScreen> {
-  double _maxDistanceKm = 10;
+  static const String _kmlAssetPath =
+      'assets/data/PRM stacje roweru miejskiego.kml';
 
-  // Przykładowe trasy — podłączysz do warstw KML.
-  final List<Map<String, dynamic>> _routes = [
-    {'name': 'Bulwary Wiślane', 'distance': 5.2, 'surface': 'asfalt'},
-    {'name': 'Soczewka — Zalew', 'distance': 12.4, 'surface': 'mieszana'},
-    {'name': 'Tumskie — Park', 'distance': 8.1, 'surface': 'asfalt'},
-  ];
+  final MapController _mapController = MapController();
+  final List<Marker> _markers = [];
+  bool _loading = true;
+  String? _error;
+
+  // Fallback – centrum Płocka zanim dopasujemy do markerów
+  static const LatLng _plockCenter = LatLng(52.546, 19.706);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadKmlAndRender();
+  }
+
+  Future<void> _loadKmlAndRender() async {
+    try {
+      final kmlText = await rootBundle.loadString(_kmlAssetPath);
+      final markers = _parseKmlToMarkers(kmlText);
+
+      if (!mounted) return;
+      setState(() {
+        _markers
+          ..clear()
+          ..addAll(markers);
+        _loading = false;
+        _error = markers.isEmpty ? 'Brak stacji w pliku KML' : null;
+      });
+
+      if (markers.isNotEmpty) {
+        await _fitToAllMarkers();
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _error = 'Nie udało się wczytać KML: $e';
+      });
+    }
+  }
+
+  List<Marker> _parseKmlToMarkers(String kml) {
+    final doc = xml.XmlDocument.parse(kml);
+    final placemarks = doc.findAllElements('Placemark');
+    final List<Marker> result = [];
+
+    for (final pm in placemarks) {
+      final name = pm.getElement('name')?.innerText.trim();
+
+      final point = pm.findAllElements('Point').firstOrNull;
+      if (point == null) continue;
+
+      final coordsText = point.getElement('coordinates')?.innerText.trim();
+      if (coordsText == null || coordsText.isEmpty) continue;
+
+      // KML: "lon,lat[,alt] [spacja] lon,lat ..."
+      final firstPair = coordsText
+          .split(RegExp(r'\s+'))
+          .firstWhere((e) => e.contains(','), orElse: () => coordsText);
+
+      final parts = firstPair.split(',');
+      if (parts.length < 2) continue;
+
+      final lon = double.tryParse(parts[0]);
+      final lat = double.tryParse(parts[1]);
+      if (lat == null || lon == null) continue;
+
+      final pos = LatLng(lat, lon);
+      result.add(
+        Marker(
+          point: pos,
+          width: 40,
+          height: 40,
+          child: const Icon(
+            Icons.pedal_bike,
+            size: 34,
+            color: Colors.blueAccent,
+          ),
+        ),
+      );
+    }
+    return result;
+  }
+
+  Future<void> _fitToAllMarkers() async {
+    if (_markers.length == 1) {
+      final only = _markers.first.point;
+      _mapController.move(only, 16);
+      return;
+    }
+
+    double? minLat, maxLat, minLng, maxLng;
+    for (final m in _markers) {
+      final lat = m.point.latitude;
+      final lng = m.point.longitude;
+      minLat = (minLat == null) ? lat : math.min(minLat, lat);
+      maxLat = (maxLat == null) ? lat : math.max(maxLat, lat);
+      minLng = (minLng == null) ? lng : math.min(minLng, lng);
+      maxLng = (maxLng == null) ? lng : math.max(maxLng, lng);
+    }
+
+    final bounds = LatLngBounds(
+      LatLng(minLat!, minLng!),
+      LatLng(maxLat!, maxLng!),
+    );
+
+    // padding ~60 px
+    final fit =
+        CameraFit.bounds(bounds: bounds, padding: const EdgeInsets.all(60));
+    final camera = fit.fit(_mapController.camera);
+    _mapController.move(camera.center, camera.zoom);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final filtered =
-        _routes.where((r) => r['distance'] <= _maxDistanceKm).toList();
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Rower — trasy'),
+        title: const Text('Stacje roweru miejskiego (OSM)'),
         centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(
-                    color: Theme.of(context).colorScheme.outlineVariant),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.tune),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Filtr: maks. dystans ${_maxDistanceKm.toStringAsFixed(0)} km',
-                          style: const TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: _maxDistanceKm,
-                      min: 3,
-                      max: 30,
-                      divisions: 27,
-                      label: '${_maxDistanceKm.toStringAsFixed(0)} km',
-                      onChanged: (v) => setState(() => _maxDistanceKm = v),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: filtered.length,
-              itemBuilder: (context, i) {
-                final r = filtered[i];
-                return Card(
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.outlineVariant),
-                  ),
-                  child: ListTile(
-                    leading: const Icon(Icons.pedal_bike),
-                    title: Text(r['name']),
-                    subtitle: Text(
-                      'Dystans: ${r['distance']} km • Nawierzchnia: ${r['surface']}',
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      // TODO: podgląd trasy na mapie + profil wysokości
-                    },
-                  ),
-                );
-              },
-            ),
+        actions: [
+          IconButton(
+            tooltip: 'Przeładuj KML',
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadKmlAndRender,
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.map_outlined),
-        label: const Text('Pokaż na mapie'),
-        onPressed: () {
-          // TODO: otwarcie mapy z warstwami KML tras rowerowych
-        },
+      body: Stack(
+        children: [
+          FlutterMap(
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: _plockCenter,
+              initialZoom: 12,
+              interactionOptions: const InteractionOptions(
+                flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
+              ),
+            ),
+            children: [
+              TileLayer(
+                // Płytki OpenStreetMap — pamiętaj o atrybucji:
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: const ['a', 'b', 'c'],
+                userAgentPackageName: 'pl.twoja.aplikacja', // dobry zwyczaj
+                retinaMode: MediaQuery.of(context).devicePixelRatio > 1.6,
+              ),
+              MarkerLayer(markers: _markers),
+              RichAttributionWidget(
+                attributions: const [
+                  TextSourceAttribution(
+                    '© OpenStreetMap contributors',
+                    onTap: null,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          if (_loading)
+            const Positioned.fill(
+              child: ColoredBox(
+                color: Colors.transparent,
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ),
+          if (_error != null && !_loading)
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 16,
+              child: Material(
+                color: Theme.of(context).colorScheme.errorContainer,
+                borderRadius: BorderRadius.circular(12),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Text(
+                    _error!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onErrorContainer,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
+      floatingActionButton: (_markers.isNotEmpty && !_loading)
+          ? FloatingActionButton.extended(
+              icon: const Icon(Icons.zoom_out_map),
+              label: const Text('Pokaż wszystkie'),
+              onPressed: _fitToAllMarkers,
+            )
+          : null,
     );
   }
+}
+
+class _StationMarker extends StatelessWidget {
+  final String label;
+  const _StationMarker({required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min, // dopasuj do treści
+      children: [
+        const Icon(Icons.pedal_bike, size: 28, color: Colors.blueAccent),
+        const SizedBox(height: 2),
+        Container(
+          constraints: const BoxConstraints(
+            maxWidth: 100, // niech długie nazwy się zawijają
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(color: Colors.black26),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 2,
+                offset: const Offset(1, 1),
+              ),
+            ],
+          ),
+          child: Text(
+            label,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 11, height: 1.2),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+extension _FirstOrNull<E> on Iterable<E> {
+  E? get firstOrNull => isEmpty ? null : first;
 }

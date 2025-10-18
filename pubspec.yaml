@@ -25,3 +25,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/data/sump/highway_busstop_sump_osm.kml
+    - assets/data/PRM stacje roweru miejskiego.kml
