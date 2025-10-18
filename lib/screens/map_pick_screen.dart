@@ -26,6 +26,7 @@ class _MapPickScreenState extends State<MapPickScreen> {
   Map<String, List<LatLng>> _busLines = {};
   List<LatLng> _bikeStations = [];
   List<LatLng> _busStopsExtra = []; // ⬅️ NOWE
+  double _maxBikeKm = 7.0; // startowa wartość, zsynchronizujemy z plannerem
 
   // Wynik
   List<Polyline> _routeLines = [];
@@ -38,10 +39,10 @@ class _MapPickScreenState extends State<MapPickScreen> {
   // Loader i planer
   final _loader = KmlLoader();
   final eco.EcoPlanner _planner = eco.EcoPlanner(); // ✅ pewny typ
-
   @override
   void initState() {
     super.initState();
+    _planner.setMaxBikeLegKm(_maxBikeKm);
     _loadKml();
   }
 
@@ -134,7 +135,6 @@ class _MapPickScreenState extends State<MapPickScreen> {
     }
   }
 
-  // ✅ poprawna sygnatura dla flutter_map v5/6
   void _onTap(TapPosition tapPosition, LatLng latLng) {
     setState(() {
       if (_start == null) {
@@ -149,6 +149,74 @@ class _MapPickScreenState extends State<MapPickScreen> {
         _itinerary.clear();
       }
     });
+
+    if (_start != null && _end != null) {
+      _replan();
+    }
+  }
+
+  void _showRoutingSettings() {
+    showModalBottomSheet(
+      context: context,
+      showDragHandle: true,
+      builder: (ctx) {
+        double tempValue = _maxBikeKm;
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Maks. długość odcinka rowerem',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Slider(
+                          min: 1.0,
+                          max: 12.0,
+                          divisions: 11,
+                          value: tempValue,
+                          label: '${tempValue.toStringAsFixed(1)} km',
+                          onChanged: (v) => setModalState(() => tempValue = v),
+                        ),
+                      ),
+                      SizedBox(
+                          width: 56,
+                          child: Text('${tempValue.toStringAsFixed(1)} km')),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          icon: const Icon(Icons.check),
+                          label: const Text('Zastosuj'),
+                          onPressed: () {
+                            Navigator.pop(ctx);
+                            setState(() {
+                              _maxBikeKm = tempValue;
+                              _planner.setMaxBikeLegKm(_maxBikeKm);
+                            });
+                            if (_start != null && _end != null) {
+                              _replan(); // przelicz od razu
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -227,6 +295,11 @@ class _MapPickScreenState extends State<MapPickScreen> {
             onPressed: _loadKml,
             icon: const Icon(Icons.refresh),
             tooltip: 'Przeładuj KML',
+          ),
+          IconButton(
+            onPressed: _showRoutingSettings,
+            icon: const Icon(Icons.tune),
+            tooltip: 'Ustawienia trasy',
           ),
         ],
       ),

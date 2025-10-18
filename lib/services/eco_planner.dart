@@ -1,7 +1,7 @@
 // lib/services/eco_planner.dart
-// Planowanie pieszo/rower/autobus po SIECI ULIC (OSRM demo).
-// W pubspec.yaml dodaj dependency: http: ^1.2.2
-// i upewnij się, że masz plik lib/services/street_router.dart z Profile.walking/cycling/driving.
+// Planowanie pieszo/rower/autobus po SIECI ULIC (OSRM).
+// W pubspec.yaml:  http: ^1.2.2
+// street_router.dart musi mieć Profile.walking / cycling / driving.
 
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -14,18 +14,19 @@ import 'street_router.dart';
 class EcoPlanner {
   final StreetRouter router;
 
-  // Parametry prędkości i kar (możesz dostroić):
+  // Parametry prędkości/kar:
   final double walkKmh;
   final double bikeKmh;
   final double busKmh;
   final double busWaitPenaltyMin;
 
-  // Polityka wyboru trasy:
-  final double maxWalkToBikeM = 600; // max dojście do stacji (A i B)
-  final double maxBikeLegKm = 7.0; // maksymalna długość przejazdu rowerem
-  final double preferBikeUpToKm = 5.0; // do tej odległości preferuj rower
-  final double maxWalkToBusM = 800; // max dojście do przystanku
-  final double minBusLegKm = 2.0; // min. sensowna długość przejazdu autobusem
+  // Polityka wyboru (strojenie z UI przez settery):
+  double maxWalkToBikeM; // max dojście pieszo do/od stacji roweru
+  double maxBikeLegKm; // maks. długość przejazdu rowerem (regulowane suwakiem)
+  double
+      preferBikeUpToKm; // (informacyjne) do tej odległości całej trasy preferuj rower
+  double maxWalkToBusM; // max dojście pieszo do/od przystanku
+  double minBusLegKm; // minimalny sensowny odcinek autobusem
 
   EcoPlanner({
     StreetRouter? router,
@@ -33,55 +34,64 @@ class EcoPlanner {
     this.bikeKmh = 15.0,
     this.busKmh = 26.0,
     this.busWaitPenaltyMin = 6.0,
+    this.maxWalkToBikeM = 600,
+    this.maxBikeLegKm = 7.0,
+    this.preferBikeUpToKm = 5.0,
+    this.maxWalkToBusM = 800,
+    this.minBusLegKm = 2.0,
   }) : router = router ?? StreetRouter();
+
+  // Settery do sterowania z UI
+  void setMaxBikeLegKm(double km) => maxBikeLegKm = km;
+  void setMaxWalkToBikeM(double m) => maxWalkToBikeM = m;
 
   double _chainLengthKm(List<LatLng> pts) => _polylineLengthKm(pts);
 
-  /// Główne planowanie – wybiera najszybszego kandydata
+  /// Główne planowanie: wybieramy wariant zgodnie z polityką:
+  /// 1) jeśli rower dostępny -> porównaj rower vs autobus (wybierz szybszy),
+  /// 2) jeśli rower niedostępny, a autobus dostępny -> wybierz autobus (NIE pieszo),
+  /// 3) inaczej -> pieszo.
   Future<Plan> plan({
     required LatLng start,
     required LatLng end,
     required List<LatLng> bikeStations,
     required Map<String, List<LatLng>> busLines,
   }) async {
-    // policz pieszą trasę jako odniesienie
+    // policz referencyjny dystans pieszo (po ulicach) – przydatne do diagnostyki/telemetrii
     final walkAB = await _routeOrThrow([start, end], Profile.walking);
     final walkABkm = _polylineLengthKm(walkAB);
 
-    final candidates = <_Candidate>[];
+    // Przygotuj kandydatów
+    final walkCandidate = await _walkOnly(start, end);
 
-    // A) pieszo – zawsze baseline
-    candidates.add(await _walkOnly(start, end));
-
-    // B) rower + pieszo (jeśli sensownie krótka)
+    _Candidate? bikeCandidate;
     if (bikeStations.isNotEmpty) {
-      final bikeCand = await _bikePlusWalk(
-        start,
-        end,
-        bikeStations,
-        preferBikeUpToKm: preferBikeUpToKm,
-        maxWalkToBikeM: maxWalkToBikeM,
-        maxBikeLegKm: maxBikeLegKm,
-      );
-      if (bikeCand != null) candidates.add(bikeCand);
+      bikeCandidate = await _bikePlusWalk(start, end, bikeStations);
     }
 
-    // C) autobus + pieszo (jeśli dystans większy)
-    if (busLines.isNotEmpty && walkABkm >= (preferBikeUpToKm - 0.5)) {
-      final busCand = await _busPlusWalk(
-        start,
-        end,
-        busLines,
-        maxWalkToBusM: maxWalkToBusM,
-        minBusLegKm: minBusLegKm,
-      );
-      if (busCand != null) candidates.add(busCand);
+    _Candidate? busCandidate;
+    if (busLines.isNotEmpty) {
+      busCandidate = await _busPlusWalk(start, end, busLines);
     }
 
-    candidates.sort((a, b) => a.totalMinutes.compareTo(b.totalMinutes));
-    final best = candidates.first;
+    // Decyzja:
+    _Candidate chosen;
+    if (bikeCandidate != null && busCandidate != null) {
+      // Rower dostępny – porównaj z autobusem i wybierz szybszy
+      chosen = (bikeCandidate.totalMinutes <= busCandidate.totalMinutes)
+          ? bikeCandidate
+          : busCandidate;
+    } else if (bikeCandidate != null) {
+      chosen = bikeCandidate;
+    } else if (busCandidate != null) {
+      // WAŻNE: jeśli rower odpadł, a autobus jest możliwy -> wybieramy autobus, nie pieszo
+      chosen = busCandidate;
+    } else {
+      // brak roweru i autobusu – zostaje pieszo
+      chosen = walkCandidate;
+    }
 
-    // Złóż finalny Plan
+    // Markery A/B + ewentualne dodatkowe
     final markers = <Marker>[
       Marker(
           point: start,
@@ -93,11 +103,12 @@ class EcoPlanner {
           width: 40,
           height: 40,
           child: const Icon(Icons.place, size: 36)),
-      ...best.extraMarkers,
+      ...chosen.extraMarkers,
     ];
 
+    // Sumy metrów wg trybu
     double walkM = 0, bikeM = 0, busM = 0;
-    for (final s in best.steps) {
+    for (final s in chosen.steps) {
       switch (s.mode) {
         case 'Pieszo':
           walkM += s.distanceMeters;
@@ -111,8 +122,8 @@ class EcoPlanner {
     }
 
     return Plan(
-      steps: best.steps,
-      polylines: best.polylines,
+      steps: chosen.steps,
+      polylines: chosen.polylines,
       markers: markers,
       walkMeters: walkM,
       busMeters: busM,
@@ -120,7 +131,7 @@ class EcoPlanner {
     );
   }
 
-  // ======== Routing z kontrolą błędów ========
+  // —— Routing z kontrolą błędów (nie dopuszczamy „2 punktów” = prosta) ——
   Future<List<LatLng>> _routeOrThrow(List<LatLng> pts, Profile profile) async {
     final out = await router.route(pts, profile: profile);
     if (out.length <= 2) {
@@ -129,7 +140,7 @@ class EcoPlanner {
     return out;
   }
 
-  // ======== WARIANTY ========
+  // ================== WARIANTY ==================
 
   Future<_Candidate> _walkOnly(LatLng a, LatLng b) async {
     final pts = await _routeOrThrow([a, b], Profile.walking);
@@ -154,34 +165,32 @@ class EcoPlanner {
     );
   }
 
+  /// Rowery + pieszo — limit długości odcinka rowerowego liczony po REALNYM śladzie OSRM.
   Future<_Candidate?> _bikePlusWalk(
     LatLng start,
     LatLng end,
-    List<LatLng> stations, {
-    required double preferBikeUpToKm,
-    required double maxWalkToBikeM,
-    required double maxBikeLegKm,
-  }) async {
+    List<LatLng> stations,
+  ) async {
     final s1 = _nearest(stations, start);
     final s2 = _nearest(stations, end);
     if (s1 == null || s2 == null) return null;
 
+    // Twardy limit dojść pieszych do stacji (po prostej – preselekcja)
     final walkToS1m = _km(start, s1) * 1000.0;
     final walkFromS2m = _km(s2, end) * 1000.0;
     if (walkToS1m > maxWalkToBikeM || walkFromS2m > maxWalkToBikeM) return null;
 
-    final rideKmApprox = _km(s1, s2);
-    if (rideKmApprox > maxBikeLegKm && preferBikeUpToKm < rideKmApprox) {
-      return null;
-    }
-
+    // REALNE trasy po ulicach
     final walk1Pts = await _routeOrThrow([start, s1], Profile.walking);
     final ridePts = await _routeOrThrow([s1, s2], Profile.cycling);
     final walk2Pts = await _routeOrThrow([s2, end], Profile.walking);
 
     final walk1Km = _polylineLengthKm(walk1Pts);
-    final rideKm = _polylineLengthKm(ridePts);
+    final rideKm = _polylineLengthKm(ridePts); // realny odcinek rowerem
     final walk2Km = _polylineLengthKm(walk2Pts);
+
+    // Odrzuć rower dopiero, gdy realny odcinek przekracza limit
+    if (rideKm > maxBikeLegKm) return null;
 
     final minutes =
         (walk1Km / walkKmh + rideKm / bikeKmh + walk2Km / walkKmh) * 60.0;
@@ -240,13 +249,12 @@ class EcoPlanner {
     );
   }
 
+  /// Autobus + pieszo (po jednej linii), z ograniczeniem dojścia i min. długości przejazdu.
   Future<_Candidate?> _busPlusWalk(
     LatLng start,
     LatLng end,
-    Map<String, List<LatLng>> busLines, {
-    required double maxWalkToBusM,
-    required double minBusLegKm,
-  }) async {
+    Map<String, List<LatLng>> busLines,
+  ) async {
     _Candidate? best;
 
     for (final entry in busLines.entries) {
@@ -258,19 +266,22 @@ class EcoPlanner {
       final iEnd = _nearestIndex(stops, end);
       if (iStart == null || iEnd == null) continue;
 
+      // Limity dojścia do/z przystanków (po prostej – preselekcja)
       final walkToStopM = _km(start, stops[iStart]) * 1000.0;
       final walkFromStopM = _km(stops[iEnd], end) * 1000.0;
       if (walkToStopM > maxWalkToBusM || walkFromStopM > maxWalkToBusM)
         continue;
 
+      // Kierunek krótszy po bazowej geometrii przystanków
       final segA = _subsegment(stops, iStart, iEnd);
       final segB = _subsegment(stops, iEnd, iStart);
-      final lenA = _chainLengthKm(segA);
-      final lenB = _chainLengthKm(segB);
-      final busNodes = (lenA <= lenB) ? segA : segB.reversed.toList();
+      final busNodes = (_chainLengthKm(segA) <= _chainLengthKm(segB))
+          ? segA
+          : segB.reversed.toList();
 
       if (_chainLengthKm(busNodes) < minBusLegKm) continue;
 
+      // REALNE dojścia i przejazd
       final walk1Pts =
           await _routeOrThrow([start, busNodes.first], Profile.walking);
       final walk2Pts =
@@ -352,7 +363,7 @@ class EcoPlanner {
     return best;
   }
 
-  // ======== POMOCNIKI GEO ========
+  // ================== POMOCNIKI GEO ==================
 
   double _polylineLengthKm(List<LatLng> pts) {
     if (pts.length < 2) return 0.0;
@@ -364,7 +375,7 @@ class EcoPlanner {
   }
 
   double _km(LatLng a, LatLng b) {
-    const R = 6371.0; // km
+    const R = 6371.0;
     final dLat = _deg2rad(b.latitude - a.latitude);
     final dLon = _deg2rad(b.longitude - a.longitude);
     final sa = math.sin(dLat / 2), sb = math.sin(dLon / 2);
@@ -407,7 +418,7 @@ class EcoPlanner {
   }
 }
 
-// ======== Wewnętrzny nośnik kandydata ========
+// Nośnik kandydata (wewnętrzny)
 class _Candidate {
   final String label;
   final double totalMinutes;
