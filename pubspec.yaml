@@ -1,0 +1,27 @@
+name: sump
+publish_to: 'none'
+description: Nowoczesny szkielet aplikacji komunikacji dla Płocka (Flutter)
+version: 0.1.0+1
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  flutter_map: ^7.0.0
+  latlong2: ^0.9.0
+  cupertino_icons: ^1.0.8
+  xml: ^6.5.0
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/data/sump/highway_busstop_sump_osm.kml

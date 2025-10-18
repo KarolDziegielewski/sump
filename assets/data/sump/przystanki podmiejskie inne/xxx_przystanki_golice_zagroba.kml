@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="xxx_przystanki_golice_zagroba" id="xxx_przystanki_golice_zagroba">
+	<SimpleField name="ogc_fid" type="float"></SimpleField>
+	<SimpleField name="gml_id" type="string"></SimpleField>
+	<SimpleField name="lokalnyid" type="string"></SimpleField>
+	<SimpleField name="przestrzen" type="string"></SimpleField>
+	<SimpleField name="wersjaid" type="string"></SimpleField>
+	<SimpleField name="czyobiektb" type="string"></SimpleField>
+	<SimpleField name="x_kod" type="string"></SimpleField>
+	<SimpleField name="x_skrkarto" type="string"></SimpleField>
+	<SimpleField name="x_katdoklg" type="string"></SimpleField>
+	<SimpleField name="x_doklgeom" type="float"></SimpleField>
+	<SimpleField name="x_zrodloda" type="string"></SimpleField>
+	<SimpleField name="x_zrodlo_1" type="string"></SimpleField>
+	<SimpleField name="x_katistni" type="string"></SimpleField>
+	<SimpleField name="x_rodzajre" type="string"></SimpleField>
+	<SimpleField name="x_uwagi" type="string"></SimpleField>
+	<SimpleField name="x_uzytkown" type="string"></SimpleField>
+	<SimpleField name="x_aktualno" type="string"></SimpleField>
+	<SimpleField name="x_aktual_1" type="string"></SimpleField>
+	<SimpleField name="poczatekwe" type="string"></SimpleField>
+	<SimpleField name="koniecwers" type="string"></SimpleField>
+	<SimpleField name="x_datautwo" type="string"></SimpleField>
+	<SimpleField name="x_informdo" type="string"></SimpleField>
+	<SimpleField name="x_kodkarto" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_1" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_2" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_3" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_4" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_5" type="string"></SimpleField>
+	<SimpleField name="x_kodkar_6" type="string"></SimpleField>
+	<SimpleField name="nazwa" type="string"></SimpleField>
+	<SimpleField name="rodzaj" type="string"></SimpleField>
+	<SimpleField name="teryt" type="string"></SimpleField>
+	<SimpleField name="geom_area" type="float"></SimpleField>
+	<SimpleField name="geom_lengt" type="float"></SimpleField>
+	<SimpleField name="KOD10K" type="string"></SimpleField>
+	<SimpleField name="241 Słupn" type="string"></SimpleField>
+	<SimpleField name="kolejnosc" type="float"></SimpleField>
+</Schema>
+<Folder><name>xxx_przystanki_golice_zagroba</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">274361011</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.126_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FC1-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Bielska Jachowicza</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.6959291016213,52.5530390043058</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">274361104</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.99_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FA6-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2020-10-18</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Bielska Cmentarz Komunalny</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">5</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7232437545774,52.5694110528861</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">274361123</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.104_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FAB-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Bielska Wiadukt</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">4</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7114120909345,52.5633027596284</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">274361150</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.140_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FCF-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Bielska Kochanowskiego</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">3</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7020733180185,52.5571829362756</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573025</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.109_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-68AD-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Dźwierzno</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">7</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7835930263204,52.5963410931108</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573026</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.110_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-68AE-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Goślice Skrzyżowanie</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">8</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7956928313823,52.6034723317293</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573414</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.138_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-68CA-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-11-14T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2022-11-14</SimpleData>
+		<SimpleData name="x_aktual_1">2022-11-14</SimpleData>
+		<SimpleData name="poczatekwe">2022/11/14 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Tchórz</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">6</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.7630641153419,52.5911415897332</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">274361161</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.121_1462</SimpleData>
+		<SimpleData name="lokalnyid">255CD114-3FBC-7BA9-E053-CC2BA8C0EE32</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1462</SimpleData>
+		<SimpleData name="x_aktualno">2015-05-10</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Jachowicza Dworzec</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1462</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="241 Słupn">241</SimpleData>
+		<SimpleData name="kolejnosc">1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.6941092370191,52.5497198554673</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573004</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.98_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-68A2-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Leszczyn Szlachecki</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">10</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8308426455443,52.6280673939156</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573394</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.020293b7-8a3d-437e-91d5-64bc0094e0fb_1419</SimpleData>
+		<SimpleData name="lokalnyid">0bc50e6c-1195-4dfc-9bf2-02cafd6b1ff8</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-11-14T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2022-11-14</SimpleData>
+		<SimpleData name="x_aktual_1">2022-11-14</SimpleData>
+		<SimpleData name="poczatekwe">2022/11/14 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2022-11-14</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Ciachcin</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">9</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8211890612025,52.6198995906036</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366572896</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.72_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-6888-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2020-10-18T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2020/10/18 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Jaroszewo</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">14</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.9118439144223,52.6492671248336</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573293</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.103_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-68A7-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-04-21T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2011-01-01</SimpleData>
+		<SimpleData name="x_aktual_1">2020-10-18</SimpleData>
+		<SimpleData name="poczatekwe">2022/04/21 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Leszczyn Księży</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">11</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8554160520539,52.6411781595131</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="ogc_fid">366573320</SimpleData>
+		<SimpleData name="gml_id">OT_OIKM_P.102_1419</SimpleData>
+		<SimpleData name="lokalnyid">2EDAFB76-68A6-5241-E053-CA2BA8C06623</SimpleData>
+		<SimpleData name="przestrzen">PL.PZGiK.330.BDOT10k</SimpleData>
+		<SimpleData name="wersjaid">2022-11-14T00:00:00</SimpleData>
+		<SimpleData name="czyobiektb">false</SimpleData>
+		<SimpleData name="x_kod">OIKM04</SimpleData>
+		<SimpleData name="x_katdoklg">Dok</SimpleData>
+		<SimpleData name="x_zrodloda">Ort</SimpleData>
+		<SimpleData name="x_zrodlo_1">Trn</SimpleData>
+		<SimpleData name="x_rodzajre">SG</SimpleData>
+		<SimpleData name="x_uzytkown">Uzytkownik14.xml_1419</SimpleData>
+		<SimpleData name="x_aktualno">2022-11-14</SimpleData>
+		<SimpleData name="x_aktual_1">2022-11-14</SimpleData>
+		<SimpleData name="poczatekwe">2022/11/14 00:00:00.000</SimpleData>
+		<SimpleData name="x_datautwo">2012-11-13</SimpleData>
+		<SimpleData name="x_kodkarto">0010_143</SimpleData>
+		<SimpleData name="nazwa">Smolino Skrzyżowanie</SimpleData>
+		<SimpleData name="rodzaj">Pat</SimpleData>
+		<SimpleData name="teryt">1419</SimpleData>
+		<SimpleData name="KOD10K">0010_143</SimpleData>
+		<SimpleData name="kolejnosc">12</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.869020219979,52.649821113361</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#xxx_przystanki_golice_zagroba">
+		<SimpleData name="nazwa">Zagroba</SimpleData>
+		<SimpleData name="kolejnosc">13</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>19.8941261501608,52.6362084538166</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
