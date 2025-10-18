@@ -4,9 +4,9 @@ import 'package:latlong2/latlong.dart';
 import 'package:xml/xml.dart' as xml;
 
 class KmlData {
-  final Map<String, List<LatLng>> busLines; // id linii -> przystanki
+  final Map<String, List<LatLng>> busLines; // id linii -> przystanki (kolejno)
   final List<LatLng> bikeStations; // stacje roweru miejskiego
-  final List<LatLng> allBusStopsExtra; // np. z assets/data/sump/...
+  final List<LatLng> allBusStopsExtra; // dodatkowe przystanki (np. OSM SUMP)
 
   KmlData({
     required this.busLines,
@@ -16,21 +16,22 @@ class KmlData {
 }
 
 class KmlLoader {
-  // Możesz nadpisać wzorce, jeśli chcesz
-  final String bikeStationsHint; // np. "PRM stacje roweru miejskiego"
+  // np. „roweru” dopasuje „stacje roweru miejskiego”
+  final String bikeStationsHint;
   KmlLoader({this.bikeStationsHint = 'roweru'});
 
   Future<KmlData> loadAll() async {
     final manifestRaw = await rootBundle.loadString('AssetManifest.json');
     final Map<String, dynamic> manifest = json.decode(manifestRaw);
 
+    // Lista wszystkich plików KML w assets
     final allKml =
         manifest.keys.where((k) => k.toLowerCase().endsWith('.kml')).toList();
 
-    // Rowery – szukaj w assets/data/ pliku zawierającego słowo-klucz (np. "roweru")
+    // --- ROWER MIEJSKI: szukaj w assets/data/sump/ (lub ogólnie assets/data/) pliku zawierającego „roweru”
     final bikeKmlPath = allKml.firstWhere(
       (p) =>
-          p.startsWith('assets/data/') &&
+          p.toLowerCase().contains('/data/') &&
           p.toLowerCase().contains(bikeStationsHint.toLowerCase()),
       orElse: () => '',
     );
@@ -41,9 +42,11 @@ class KmlLoader {
       bikeStations.addAll(_parseKmlPoints(text));
     }
 
-    // Linie autobusowe – każdy plik w assets/data/kmplock/
+    // --- LINIE AUTOBUSOWE: każdy plik w assets/data/sump/kmplock/
     final busLines = <String, List<LatLng>>{};
-    final kmplock = allKml.where((p) => p.startsWith('assets/data/kmplock/'));
+    final kmplock = allKml.where(
+      (p) => p.startsWith('assets/data/sump/kmplock/'),
+    );
     for (final path in kmplock) {
       final text = await rootBundle.loadString(path);
       final stops = _parseKmlPoints(text);
@@ -52,104 +55,60 @@ class KmlLoader {
       }
     }
 
-    // Dodatkowe przystanki zbiorcze (opcjonalnie): assets/data/sump/
-    final allBusStopsExtra = <LatLng>[];
-    final sump = allKml.where((p) => p.startsWith('assets/data/sump/'));
-    for (final path in sump) {
+    // --- DODATKOWE PRZYSTANKI (OSM/SUMP): assets/data/sump/highway_busstop_sump_osm.kml
+    final extraStops = <LatLng>[];
+
+    // 1) konkretny plik OSM z przystankami:
+    final osmBusStopsPath = allKml.firstWhere(
+      (p) => p == 'assets/data/sump/highway_busstop_sump_osm.kml',
+      orElse: () => '',
+    );
+    if (osmBusStopsPath.isNotEmpty) {
+      final text = await rootBundle.loadString(osmBusStopsPath);
+      extraStops.addAll(_parseKmlPoints(text));
+    }
+
+    // 2) (opcjonalnie) wszystko inne z katalogu sump/ — jeśli chcesz, zostawiamy jak było:
+    final sumpOthers = allKml.where((p) =>
+        p.startsWith('assets/data/sump/') &&
+        p != osmBusStopsPath && // nie dubluj
+        !p.startsWith('assets/data/sump/kmplock/')); // nie mieszaj linii
+    for (final path in sumpOthers) {
       final text = await rootBundle.loadString(path);
-      allBusStopsExtra.addAll(_parseKmlPoints(text));
+      extraStops.addAll(_parseKmlPoints(text));
     }
 
     return KmlData(
       busLines: busLines,
       bikeStations: bikeStations,
-      allBusStopsExtra: allBusStopsExtra,
+      allBusStopsExtra: extraStops,
     );
   }
 
   List<LatLng> _parseKmlPoints(String kml) {
     final doc = xml.XmlDocument.parse(kml);
-
-    // Bierzemy wszystkie Placemark (z uwzględnieniem namespace, np. <kml:Placemark>)
-    final placemarks = doc.findAllElements('Placemark', namespace: '*');
-
+    final placemarks = doc.findAllElements('Placemark');
     final out = <LatLng>[];
-
     for (final pm in placemarks) {
-      // 1) POINT
-      final point = pm.findElements('Point', namespace: '*').firstOrNull;
-      if (point != null) {
-        final coordsText =
-            point.getElement('coordinates', namespace: '*')?.text.trim();
-        final p = _firstLatLngFromCoordinates(coordsText);
-        if (p != null) out.add(p);
-        continue; // nic więcej nie szukamy w tym placemarku
-      }
+      final point = pm.findAllElements('Point').isEmpty
+          ? null
+          : pm.findAllElements('Point').first;
+      if (point == null) continue;
+      final coordsText = point.getElement('coordinates')?.innerText.trim();
+      if (coordsText == null || coordsText.isEmpty) continue;
 
-      // 2) LINESTRING (jeśli kiedyś zechcesz same węzły linii potraktować jak punkty)
-      final line = pm.findElements('LineString', namespace: '*').firstOrNull;
-      if (line != null) {
-        final coordsText =
-            line.getElement('coordinates', namespace: '*')?.text.trim();
-        final pts = _allLatLngFromCoordinates(coordsText);
-        out.addAll(pts);
-        continue;
-      }
-
-      // 3) MultiGeometry (opcjonalnie: LineString/Point w środku)
-      final multi =
-          pm.findElements('MultiGeometry', namespace: '*').firstOrNull;
-      if (multi != null) {
-        // Points
-        for (final p in multi.findAllElements('Point', namespace: '*')) {
-          final coordsText =
-              p.getElement('coordinates', namespace: '*')?.text.trim();
-          final ll = _firstLatLngFromCoordinates(coordsText);
-          if (ll != null) out.add(ll);
-        }
-        // LineStrings
-        for (final l in multi.findAllElements('LineString', namespace: '*')) {
-          final coordsText =
-              l.getElement('coordinates', namespace: '*')?.text.trim();
-          out.addAll(_allLatLngFromCoordinates(coordsText));
-        }
-      }
+      // weź pierwszy zestaw lon,lat[,alt]
+      final firstPair = coordsText
+          .split(RegExp(r'\s+'))
+          .firstWhere((e) => e.contains(','), orElse: () => coordsText);
+      final parts = firstPair.split(',');
+      if (parts.length < 2) continue;
+      final lon = double.tryParse(parts[0]);
+      final lat = double.tryParse(parts[1]);
+      if (lat == null || lon == null) continue;
+      out.add(LatLng(lat, lon));
     }
-
     return out;
-  }
-
-// Zwraca pierwszy punkt z ciągu "lon,lat[,alt] lon,lat[,alt] ..."
-  LatLng? _firstLatLngFromCoordinates(String? coordsText) {
-    if (coordsText == null || coordsText.isEmpty) return null;
-    final firstPair = coordsText
-        .split(RegExp(r'\s+'))
-        .firstWhere((e) => e.contains(','), orElse: () => '');
-    if (firstPair.isEmpty) return null;
-    final parts = firstPair.split(',');
-    if (parts.length < 2) return null;
-    final lon = double.tryParse(parts[0]);
-    final lat = double.tryParse(parts[1]);
-    if (lat == null || lon == null) return null;
-    return LatLng(lat, lon);
-  }
-
-// Zwraca wszystkie punkty z "lon,lat[,alt] lon,lat[,alt] ..."
-  List<LatLng> _allLatLngFromCoordinates(String? coordsText) {
-    if (coordsText == null || coordsText.isEmpty) return const [];
-    return coordsText
-        .split(RegExp(r'\s+'))
-        .where((s) => s.contains(','))
-        .map((pair) {
-          final parts = pair.split(',');
-          if (parts.length < 2) return null;
-          final lon = double.tryParse(parts[0]);
-          final lat = double.tryParse(parts[1]);
-          if (lat == null || lon == null) return null;
-          return LatLng(lat, lon);
-        })
-        .whereType<LatLng>()
-        .toList();
   }
 
   String _lineIdFromPath(String path) {
@@ -157,9 +116,4 @@ class KmlLoader {
     final m = RegExp(r'^\d+').firstMatch(file);
     return m?.group(0) ?? file.replaceAll('.kml', '');
   }
-}
-
-// syntactic sugar
-extension on Iterable {
-  get firstOrNull => isEmpty ? null : first;
 }
