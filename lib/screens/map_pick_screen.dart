@@ -13,14 +13,14 @@ class _MapPickScreenState extends State<MapPickScreen> {
   LatLng? _start;
   LatLng? _end;
 
-  void _onTap(TapPosition tapPosition, LatLng latlng) {
+  void _onTap(TapPosition _, LatLng latlng) {
     setState(() {
       if (_start == null) {
         _start = latlng;
       } else if (_end == null) {
         _end = latlng;
       } else {
-        // trzecie stuknięcie – podmieniamy bliższy punkt
+        // trzecie i kolejne stuknięcia podmieniają bliższy punkt
         final d = const Distance();
         final ds = d(_start!, latlng);
         final de = d(_end!, latlng);
@@ -33,10 +33,7 @@ class _MapPickScreenState extends State<MapPickScreen> {
     });
   }
 
-  void _clear() => setState(() {
-        _start = null;
-        _end = null;
-      });
+  void _clear() => setState(() { _start = null; _end = null; });
 
   void _confirm() {
     if (_start != null && _end != null) {
@@ -46,7 +43,7 @@ class _MapPickScreenState extends State<MapPickScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const plockCenter = LatLng(52.5468, 19.7064);
+    const plock = LatLng(52.5468, 19.7064);
 
     final markers = <Marker>[
       if (_start != null)
@@ -58,13 +55,11 @@ class _MapPickScreenState extends State<MapPickScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Wybierz start i cel'),
-        actions: [
-          IconButton(onPressed: _clear, icon: const Icon(Icons.clear_all), tooltip: 'Wyczyść'),
-        ],
+        actions: [IconButton(onPressed: _clear, icon: const Icon(Icons.clear_all), tooltip: 'Wyczyść')],
       ),
       body: FlutterMap(
         options: MapOptions(
-          initialCenter: plockCenter,
+          initialCenter: plock,
           initialZoom: 13,
           onTap: _onTap,
         ),
@@ -74,6 +69,10 @@ class _MapPickScreenState extends State<MapPickScreen> {
             userAgentPackageName: 'com.example.app',
           ),
           MarkerLayer(markers: markers),
+          if (_start != null && _end != null)
+            PolylineLayer(polylines: [
+              Polyline(points: [_start!, _end!], strokeWidth: 4),
+            ]),
         ],
       ),
       bottomNavigationBar: SafeArea(
@@ -89,3 +88,4 @@ class _MapPickScreenState extends State<MapPickScreen> {
     );
   }
 }
+
