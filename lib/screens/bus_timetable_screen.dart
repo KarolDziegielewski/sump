@@ -63,6 +63,7 @@ class _BusTimetableScreenState extends State<BusTimetableScreen> {
               padding: const EdgeInsets.all(16),
               itemBuilder: (context, i) {
                 final tt = filtered[i];
+
                 return InkWell(
                   borderRadius: BorderRadius.circular(16),
                   onTap: () {
@@ -77,12 +78,40 @@ class _BusTimetableScreenState extends State<BusTimetableScreen> {
                         color: Theme.of(context).colorScheme.outlineVariant,
                       ),
                     ),
-                    child: ListTile(
-                      leading: const Icon(Icons.directions_bus),
-                      title: Text(tt.title,
-                          style: const TextStyle(fontWeight: FontWeight.w600)),
-                      subtitle: Text(tt.operatorName),
-                      trailing: const Icon(Icons.chevron_right),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.directions_bus),
+                            title: Text(
+                              tt.title,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Text(tt.operatorName),
+                            trailing: const Icon(Icons.chevron_right),
+                          ),
+                          const SizedBox(height: 4),
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              'Cena biletu: 7,80 zł',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
+                                fontSize: 13.5,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      ),
                     ),
                   ),
                 );
