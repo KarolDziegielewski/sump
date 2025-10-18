@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   // DWA PRZYCISKI – „glass cards” z animacją skali
                   _BigChoiceCard(
                     icon: Icons.alt_route_rounded,
-                    title: 'Plnaer Podróży',
+                    title: 'Planer Podróży',
                     subtitle: 'Szybkie planowanie trasy',
                     onTap: () {
                       HapticFeedback.selectionClick();
