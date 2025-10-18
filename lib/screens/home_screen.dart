@@ -1,9 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:marquee/marquee.dart'; // ⬅️ nowy import
 import 'transport_screen.dart';
 import 'timetable_screen.dart';
-import 'rideshare_screen.dart'; //trzeci
+import 'rideshare_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // GRADIENT TŁA + animowane „blobsy” (nowoczesny vibe)
+          // TŁO
           AnimatedBuilder(
             animation: _bgCtrl,
             builder: (_, __) {
@@ -64,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 12),
+
                   // Nagłówek
                   Text(
                     'Płock – komunikacja',
@@ -103,9 +105,46 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ],
                   ),
 
+                  const SizedBox(height: 16),
+
+                  // 🔹 PASEK Z PRZEWIJAJĄCYM SIĘ TEKSTEM
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: cs.surface.withOpacity(0.6),
+                          border: Border.all(
+                              color: cs.outlineVariant.withOpacity(0.35)),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Marquee(
+                          text:
+                              '🎫 Odbierz darmowy bilet za 20 punktów     🚲 Przejedź się za darmo na rowerze za 10 punktów     ',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: cs.primary,
+                              ),
+                          blankSpace: 60,
+                          velocity: 45,
+                          pauseAfterRound: const Duration(seconds: 1),
+                          startPadding: 20,
+                          accelerationDuration: const Duration(seconds: 1),
+                          decelerationDuration:
+                              const Duration(milliseconds: 800),
+                        ),
+                      ),
+                    ),
+                  ),
+
                   const Spacer(),
 
-                  // DWA PRZYCISKI – „glass cards” z animacją skali
+                  // 🔹 PRZYCISKI
                   _BigChoiceCard(
                     icon: Icons.alt_route_rounded,
                     title: 'Planer Podróży',
@@ -130,17 +169,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         _fadeRoute(const TimetableScreen()),
                       );
                     },
-                  ),const SizedBox(height: 16),
-_BigChoiceCard( // ⬅️ DODANE (trzeci kafelek)
-  icon: Icons.directions_car_rounded,
-  title: 'BlaBlaCar',
-  subtitle: 'Dodaj lub znajdź wspólny przejazd',
-  onTap: () {
-    HapticFeedback.selectionClick();
-    Navigator.push(context, _fadeRoute(const RideShareScreen()));
-  },
-),
-
+                  ),
+                  const SizedBox(height: 16),
+                  _BigChoiceCard(
+                    icon: Icons.directions_car_rounded,
+                    title: 'BlaBlaCar',
+                    subtitle: 'Dodaj lub znajdź wspólny przejazd',
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      Navigator.push(
+                          context, _fadeRoute(const RideShareScreen()));
+                    },
+                  ),
 
                   const Spacer(),
                 ],
@@ -319,7 +359,7 @@ class _BigChoiceCardState extends State<_BigChoiceCard> {
   }
 }
 
-// Fade route (nowocześniejsze przejście niż domyślne)
+// Fade route (ładne przejście)
 PageRouteBuilder _fadeRoute(Widget page) => PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 260),
       reverseTransitionDuration: const Duration(milliseconds: 220),
@@ -330,7 +370,7 @@ PageRouteBuilder _fadeRoute(Widget page) => PageRouteBuilder(
       ),
     );
 
-// Prosty painter animowanych blosów (bez zależności zewnętrznych)
+// Painter blobów w tle
 class _BlobsPainter extends CustomPainter {
   final Color a, b, c;
   final double t;
@@ -339,27 +379,17 @@ class _BlobsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width, h = size.height;
-    // krążki poruszające się po sinusach
     void blob(Color color, double r, Offset center) {
       final paint = Paint()..color = color;
       canvas.drawCircle(center, r, paint);
     }
 
-    blob(
-        a,
-        w * 0.35,
-        Offset(
-            w * (0.25 + 0.05 * _s(1.0 * t)), h * (0.25 + 0.04 * _s(1.4 * t))));
-    blob(
-        b,
-        w * 0.40,
-        Offset(
-            w * (0.8 + 0.04 * _s(0.8 * t)), h * (0.28 + 0.05 * _s(1.2 * t))));
-    blob(
-        c,
-        w * 0.32,
-        Offset(
-            w * (0.55 + 0.05 * _s(1.3 * t)), h * (0.78 + 0.04 * _s(0.9 * t))));
+    blob(a, w * 0.35,
+        Offset(w * (0.25 + 0.05 * _s(1.0 * t)), h * (0.25 + 0.04 * _s(1.4 * t))));
+    blob(b, w * 0.40,
+        Offset(w * (0.8 + 0.04 * _s(0.8 * t)), h * (0.28 + 0.05 * _s(1.2 * t))));
+    blob(c, w * 0.32,
+        Offset(w * (0.55 + 0.05 * _s(1.3 * t)), h * (0.78 + 0.04 * _s(0.9 * t))));
   }
 
   double _s(double x) =>
