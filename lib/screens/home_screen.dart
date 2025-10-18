@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'transport_screen.dart';
 import 'timetable_screen.dart';
+import 'rideshare_screen.dart'; //trzeci
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -80,6 +81,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                   ),
+
+                  const SizedBox(height: 16),
+
+                  // 🔹 DWA POLA INFORMACYJNE NA GÓRZE
+                  Row(
+                    children: const [
+                      Expanded(
+                        child: _StatTile(
+                          title: 'Twoje punkty:',
+                          value: '0',
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: _StatTile(
+                          title: 'Zapobiegłeś produkcji takiej ilości CO₂:',
+                          value: '0',
+                        ),
+                      ),
+                    ],
+                  ),
+
                   const Spacer(),
 
                   // DWA PRZYCISKI – „glass cards” z animacją skali
@@ -107,7 +130,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         _fadeRoute(const TimetableScreen()),
                       );
                     },
-                  ),
+                  ),const SizedBox(height: 16),
+_BigChoiceCard( // ⬅️ DODANE (trzeci kafelek)
+  icon: Icons.directions_car_rounded,
+  title: 'BlaBlaCar',
+  subtitle: 'Dodaj lub znajdź wspólny przejazd',
+  onTap: () {
+    HapticFeedback.selectionClick();
+    Navigator.push(context, _fadeRoute(const RideShareScreen()));
+  },
+),
+
 
                   const Spacer(),
                 ],
@@ -115,6 +148,57 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Prosta „glass” płytka ze statusem (tytuł + wartość)
+class _StatTile extends StatelessWidget {
+  final String title;
+  final String value;
+  const _StatTile({required this.title, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          decoration: BoxDecoration(
+            color: cs.surface.withOpacity(0.6),
+            border: Border.all(color: cs.outlineVariant.withOpacity(0.35)),
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: cs.primary.withOpacity(0.06),
+                blurRadius: 18,
+                offset: const Offset(0, 10),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: cs.onSurfaceVariant,
+                        fontWeight: FontWeight.w500,
+                      )),
+              const SizedBox(height: 6),
+              Text(
+                value,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.2,
+                    ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
