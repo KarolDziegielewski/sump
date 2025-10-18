@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../data/timetables.dart';
+// Ekrany szczegółów i zakładek
 import 'timetable_details_screen.dart';
+import 'kmplock_lines_screen.dart';
+import 'municipal_lines_screen.dart';
 
 class BusTimetableScreen extends StatefulWidget {
   const BusTimetableScreen({super.key});
@@ -21,106 +24,57 @@ class _BusTimetableScreenState extends State<BusTimetableScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 🔍 Filtruj istniejące linie po tytule
-    final filtered = _query.isEmpty
-        ? allTimetables
-        : allTimetables
-            .where((tt) => tt.title.toLowerCase().contains(_query))
-            .toList();
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Rozkłady autobusów')),
-      body: Column(
-        children: [
-          // 🔹 Pasek wyszukiwania na górze strony
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-            child: TextField(
-              controller: _qCtrl,
-              textInputAction: TextInputAction.search,
-              onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
-              decoration: InputDecoration(
-                hintText: 'Szukaj numeru autobusu (np. 19, A, N3)',
-                prefixIcon: const Icon(Icons.search),
-                suffixIcon: _qCtrl.text.isEmpty
-                    ? null
-                    : IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          _qCtrl.clear();
-                          setState(() => _query = '');
-                        },
-                      ),
-                border: const OutlineInputBorder(),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Rozkłady autobusów'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'autobusy kmpłock'),
+              Tab(text: 'autobusy miejskie'),
+            ],
+          ),
+        ),
+        body: Column(
+          children: [
+            // wspólny pasek wyszukiwania
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: TextField(
+                controller: _qCtrl,
+                textInputAction: TextInputAction.search,
+                onChanged: (v) => setState(() => _query = v.trim()),
+                decoration: InputDecoration(
+                  hintText:
+                      'Szukaj numeru autobusu lub operatora (np. 19, A, N3)',
+                  prefixIcon: const Icon(Icons.search),
+                  suffixIcon: _qCtrl.text.isEmpty
+                      ? null
+                      : IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _qCtrl.clear();
+                            setState(() => _query = '');
+                          },
+                        ),
+                  border: const OutlineInputBorder(),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 12),
-
-          // 🔹 Lista rozkładów – filtrowana po tytule
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemBuilder: (context, i) {
-                final tt = filtered[i];
-
-                return InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => TimetableDetailsScreen(timetable: tt),
-                    ));
-                  },
-                  child: Ink(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.outlineVariant,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 4.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ListTile(
-                            leading: const Icon(Icons.directions_bus),
-                            title: Text(
-                              tt.title,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w600),
-                            ),
-                            subtitle: Text(tt.operatorName),
-                            trailing: const Icon(Icons.chevron_right),
-                          ),
-                          const SizedBox(height: 4),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(
-                              'Cena biletu: 7,80 zł',
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onSurfaceVariant,
-                                fontSize: 13.5,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              },
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemCount: filtered.length,
+            const SizedBox(height: 12),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  // 1) KM Płock
+                  KmplockLinesScreen(query: _query),
+                  // 2) Pozostałe autobusy miejskie (nie KM Płock)
+                  MunicipalLinesScreen(query: _query),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
