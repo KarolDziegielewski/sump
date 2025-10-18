@@ -90,14 +90,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Expanded(
                         child: _StatTile(
                           title: 'Twoje punkty:',
-                          value: '0',
+                          value: '14',
                         ),
                       ),
                       SizedBox(width: 12),
                       Expanded(
                         child: _StatTile(
                           title: 'Zapobiegłeś produkcji takiej ilości CO₂:',
-                          value: '0',
+                          value: '17.6kg',
                         ),
                       ),
                     ],
