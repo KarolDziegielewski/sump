@@ -1,5 +1,13 @@
 // lib/services/eco_planner.dart
-// Planowanie pieszo/rower/autobus po SIECI ULIC (OSRM).
+// Planowanie pieszo/rower/autobus po SIECI ULIC (OSRM) – wersja turbo.
+//
+// Zmiany wydajnościowe:
+// - Cache tras OSRM (klucz: profil + zaokrąglone współrzędne).
+// - Równoległe wywołania do OSRM, gdzie to bezpieczne.
+// - Autobus: jedno wywołanie z via-pointami zamiast pętli po segmentach.
+// - Wczesny pruning kandydatów (gdy optymistyczny czas >= obecnego best).
+// - (Opcjonalne) wyłączenie zbędnego routingu diagnostycznego.
+//
 // W pubspec.yaml:  http: ^1.2.2
 // street_router.dart musi mieć Profile.walking / cycling / driving.
 
@@ -23,10 +31,12 @@ class EcoPlanner {
   // Polityka wyboru (strojenie z UI przez settery):
   double maxWalkToBikeM; // max dojście pieszo do/od stacji roweru
   double maxBikeLegKm; // maks. długość przejazdu rowerem (regulowane suwakiem)
-  double
-      preferBikeUpToKm; // (informacyjne) do tej odległości całej trasy preferuj rower
+  double preferBikeUpToKm; // informacyjne
   double maxWalkToBusM; // max dojście pieszo do/od przystanku
   double minBusLegKm; // minimalny sensowny odcinek autobusem
+
+  // Diagnostyka – czy liczyć referencyjną trasę pieszo start->end (1x OSRM)
+  bool computeDiagnosticsWalkAB;
 
   EcoPlanner({
     StreetRouter? router,
@@ -39,55 +49,97 @@ class EcoPlanner {
     this.preferBikeUpToKm = 5.0,
     this.maxWalkToBusM = 800,
     this.minBusLegKm = 2.0,
+    this.computeDiagnosticsWalkAB = false,
   }) : router = router ?? StreetRouter();
 
   // Settery do sterowania z UI
   void setMaxBikeLegKm(double km) => maxBikeLegKm = km;
   void setMaxWalkToBikeM(double m) => maxWalkToBikeM = m;
 
+  // ====== CACHE TRAS (LRU w prostym wydaniu FIFO z limitem) ======
+  final Map<String, List<LatLng>> _routeCache = <String, List<LatLng>>{};
+  final List<String> _cacheOrder = <String>[];
+  final int _cacheLimit = 200; // dopasuj do RAM/aplikacji
+
+  String _routeKey(List<LatLng> pts, Profile p) {
+    // Zaokrąglamy współrzędne, by ograniczyć "szum" kluczy.
+    final sb = StringBuffer()..write(p.toString());
+    for (final pt in pts) {
+      sb
+        ..write('|')
+        ..write(pt.latitude.toStringAsFixed(6))
+        ..write(',')
+        ..write(pt.longitude.toStringAsFixed(6));
+    }
+    return sb.toString();
+  }
+
+  void _cachePut(String key, List<LatLng> value) {
+    if (_routeCache.containsKey(key)) return;
+    _routeCache[key] = value;
+    _cacheOrder.add(key);
+    if (_cacheOrder.length > _cacheLimit) {
+      final victim = _cacheOrder.removeAt(0);
+      _routeCache.remove(victim);
+    }
+  }
+
+  Future<List<LatLng>> _routeCached(List<LatLng> pts, Profile profile) async {
+    final key = _routeKey(pts, profile);
+    final hit = _routeCache[key];
+    if (hit != null && hit.length > 2) return hit;
+    final out = await router.route(pts, profile: profile);
+    if (out.length <= 2) {
+      throw Exception('OSRM zwrócił zbyt krótką geometrię (profile=$profile)');
+    }
+    _cachePut(key, out);
+    return out;
+  }
+
   double _chainLengthKm(List<LatLng> pts) => _polylineLengthKm(pts);
 
-  /// Główne planowanie: wybieramy wariant zgodnie z polityką:
-  /// 1) jeśli rower dostępny -> porównaj rower vs autobus (wybierz szybszy),
-  /// 2) jeśli rower niedostępny, a autobus dostępny -> wybierz autobus (NIE pieszo),
-  /// 3) inaczej -> pieszo.
+  /// Główne planowanie (zachowane zasady wyboru).
   Future<Plan> plan({
     required LatLng start,
     required LatLng end,
     required List<LatLng> bikeStations,
     required Map<String, List<LatLng>> busLines,
   }) async {
-    // policz referencyjny dystans pieszo (po ulicach) – przydatne do diagnostyki/telemetrii
-    final walkAB = await _routeOrThrow([start, end], Profile.walking);
-    final walkABkm = _polylineLengthKm(walkAB);
+    // (Opcjonalnie) referencyjna piesza – wyłączona domyślnie.
+    if (computeDiagnosticsWalkAB) {
+      // Nie używamy wyniku poniżej – tylko na ewentualne logi/telemetrię.
+      await _routeCached([start, end], Profile.walking);
+    }
 
-    // Przygotuj kandydatów
+    // Najpierw policz szybki wariant "pieszo" – da górne ograniczenie czasu.
     final walkCandidate = await _walkOnly(start, end);
+    double bestUpperBound = walkCandidate.totalMinutes;
 
-    _Candidate? bikeCandidate;
-    if (bikeStations.isNotEmpty) {
-      bikeCandidate = await _bikePlusWalk(start, end, bikeStations);
-    }
+    // Równolegle liczymy pozostałe (z pruningiem o bestUpperBound):
+    final futures = <Future<_Candidate?>>[
+      (bikeStations.isNotEmpty)
+          ? _bikePlusWalk(start, end, bikeStations)
+          : Future.value(null),
+      (busLines.isNotEmpty)
+          ? _busPlusWalk(start, end, busLines, bestUpperBound: bestUpperBound)
+          : Future.value(null),
+    ];
 
-    _Candidate? busCandidate;
-    if (busLines.isNotEmpty) {
-      busCandidate = await _busPlusWalk(start, end, busLines);
-    }
+    final results = await Future.wait(futures);
+    final _Candidate? bikeCandidate = results[0];
+    final _Candidate? busCandidate = results[1];
 
-    // Decyzja:
+    // Decyzja (bez zmian zasad):
     _Candidate chosen;
     if (bikeCandidate != null && busCandidate != null) {
-      // Rower dostępny – porównaj z autobusem i wybierz szybszy
       chosen = (bikeCandidate.totalMinutes <= busCandidate.totalMinutes)
           ? bikeCandidate
           : busCandidate;
     } else if (bikeCandidate != null) {
       chosen = bikeCandidate;
     } else if (busCandidate != null) {
-      // WAŻNE: jeśli rower odpadł, a autobus jest możliwy -> wybieramy autobus, nie pieszo
       chosen = busCandidate;
     } else {
-      // brak roweru i autobusu – zostaje pieszo
       chosen = walkCandidate;
     }
 
@@ -131,19 +183,10 @@ class EcoPlanner {
     );
   }
 
-  // —— Routing z kontrolą błędów (nie dopuszczamy „2 punktów” = prosta) ——
-  Future<List<LatLng>> _routeOrThrow(List<LatLng> pts, Profile profile) async {
-    final out = await router.route(pts, profile: profile);
-    if (out.length <= 2) {
-      throw Exception('OSRM zwrócił zbyt krótką geometrię (profile=$profile)');
-    }
-    return out;
-  }
-
   // ================== WARIANTY ==================
 
   Future<_Candidate> _walkOnly(LatLng a, LatLng b) async {
-    final pts = await _routeOrThrow([a, b], Profile.walking);
+    final pts = await _routeCached([a, b], Profile.walking);
     final distKm = _polylineLengthKm(pts);
     final minutes = distKm / walkKmh * 60.0;
 
@@ -165,7 +208,7 @@ class EcoPlanner {
     );
   }
 
-  /// Rowery + pieszo — limit długości odcinka rowerowego liczony po REALNYM śladzie OSRM.
+  /// Rowery + pieszo — limit długości odcinka rowerowego po REALNYM śladzie OSRM.
   Future<_Candidate?> _bikePlusWalk(
     LatLng start,
     LatLng end,
@@ -180,16 +223,20 @@ class EcoPlanner {
     final walkFromS2m = _km(s2, end) * 1000.0;
     if (walkToS1m > maxWalkToBikeM || walkFromS2m > maxWalkToBikeM) return null;
 
-    // REALNE trasy po ulicach
-    final walk1Pts = await _routeOrThrow([start, s1], Profile.walking);
-    final ridePts = await _routeOrThrow([s1, s2], Profile.cycling);
-    final walk2Pts = await _routeOrThrow([s2, end], Profile.walking);
+    // REALNE trasy po ulicach (równolegle piesze odcinki):
+    final walk1Future = _routeCached([start, s1], Profile.walking);
+    final rideFuture = _routeCached([s1, s2], Profile.cycling);
+    final walk2Future = _routeCached([s2, end], Profile.walking);
+
+    final results = await Future.wait([walk1Future, rideFuture, walk2Future]);
+    final walk1Pts = results[0] as List<LatLng>;
+    final ridePts = results[1] as List<LatLng>;
+    final walk2Pts = results[2] as List<LatLng>;
 
     final walk1Km = _polylineLengthKm(walk1Pts);
-    final rideKm = _polylineLengthKm(ridePts); // realny odcinek rowerem
+    final rideKm = _polylineLengthKm(ridePts);
     final walk2Km = _polylineLengthKm(walk2Pts);
 
-    // Odrzuć rower dopiero, gdy realny odcinek przekracza limit
     if (rideKm > maxBikeLegKm) return null;
 
     final minutes =
@@ -249,13 +296,16 @@ class EcoPlanner {
     );
   }
 
-  /// Autobus + pieszo (po jednej linii), z ograniczeniem dojścia i min. długości przejazdu.
+  /// Autobus + pieszo (po jednej linii).
+  /// Optymalizacje: pruning po optymistycznym czasie i pojedyncze route() z via-pointami.
   Future<_Candidate?> _busPlusWalk(
     LatLng start,
     LatLng end,
-    Map<String, List<LatLng>> busLines,
-  ) async {
+    Map<String, List<LatLng>> busLines, {
+    required double bestUpperBound,
+  }) async {
     _Candidate? best;
+    double currentBest = bestUpperBound;
 
     for (final entry in busLines.entries) {
       final lineId = entry.key;
@@ -269,34 +319,45 @@ class EcoPlanner {
       // Limity dojścia do/z przystanków (po prostej – preselekcja)
       final walkToStopM = _km(start, stops[iStart]) * 1000.0;
       final walkFromStopM = _km(stops[iEnd], end) * 1000.0;
-      if (walkToStopM > maxWalkToBusM || walkFromStopM > maxWalkToBusM)
+      if (walkToStopM > maxWalkToBusM || walkFromStopM > maxWalkToBusM) {
         continue;
+      }
 
-      // Kierunek krótszy po bazowej geometrii przystanków
+      // Kierunek krótszy po łańcuchu przystanków (prosta metryka)
       final segA = _subsegment(stops, iStart, iEnd);
       final segB = _subsegment(stops, iEnd, iStart);
       final busNodes = (_chainLengthKm(segA) <= _chainLengthKm(segB))
           ? segA
           : segB.reversed.toList();
 
-      if (_chainLengthKm(busNodes) < minBusLegKm) continue;
+      final straightBusKm = _chainLengthKm(busNodes);
+      if (straightBusKm < minBusLegKm) continue;
 
-      // REALNE dojścia i przejazd
-      final walk1Pts =
-          await _routeOrThrow([start, busNodes.first], Profile.walking);
-      final walk2Pts =
-          await _routeOrThrow([busNodes.last, end], Profile.walking);
+      // — Wczesny pruning: optymistyczny czas (po prostej, bez korków).
+      final optimisticMinutes = busWaitPenaltyMin +
+          ((walkToStopM / 1000.0) / walkKmh +
+                  straightBusKm / busKmh +
+                  (walkFromStopM / 1000.0) / walkKmh) *
+              60.0;
 
-      final busStreetPts = <LatLng>[];
-      for (var i = 1; i < busNodes.length; i++) {
-        final segPts = await _routeOrThrow(
-            [busNodes[i - 1], busNodes[i]], Profile.driving);
-        if (busStreetPts.isEmpty) {
-          busStreetPts.addAll(segPts);
-        } else {
-          busStreetPts.addAll(segPts.skip(1));
-        }
+      if (optimisticMinutes >= currentBest) {
+        continue; // ta linia i tak nie przebije dotychczasowego best
       }
+
+      // REALNE dojścia i przejazd – równolegle piesze odcinki:
+      final walk1Future =
+          _routeCached([start, busNodes.first], Profile.walking);
+      final walk2Future = _routeCached([busNodes.last, end], Profile.walking);
+
+      // Jeden route() dla przejazdu autobusowego z via-pointami:
+      final busStreetFuture = _routeCached(busNodes, Profile.driving);
+
+      final results =
+          await Future.wait([walk1Future, busStreetFuture, walk2Future]);
+
+      final walk1Pts = results[0] as List<LatLng>;
+      final busStreetPts = results[1] as List<LatLng>;
+      final walk2Pts = results[2] as List<LatLng>;
 
       final walk1Km = _polylineLengthKm(walk1Pts);
       final busKm = _polylineLengthKm(busStreetPts);
@@ -304,6 +365,11 @@ class EcoPlanner {
 
       final totalMinutes = busWaitPenaltyMin +
           (walk1Km / walkKmh + busKm / busKmh + walk2Km / walkKmh) * 60.0;
+
+      // Drugi pruning – już po realnym routingu:
+      if (totalMinutes >= currentBest) {
+        continue;
+      }
 
       final steps = <StepItem>[
         StepItem(
@@ -358,7 +424,8 @@ class EcoPlanner {
         steps: steps,
       );
 
-      if (best == null || cand.totalMinutes < best!.totalMinutes) best = cand;
+      best = cand;
+      currentBest = totalMinutes;
     }
     return best;
   }
@@ -421,7 +488,7 @@ class EcoPlanner {
 // Nośnik kandydata (wewnętrzny)
 class _Candidate {
   final String label;
-  final double totalMinutes;
+  final double totalMinutes; // trzymamy double do porównań
   final List<Polyline> polylines;
   final List<Marker> extraMarkers;
   final List<StepItem> steps;

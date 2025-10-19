@@ -5,6 +5,7 @@ import 'dart:ui' show lerpDouble, ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'ranking_screen.dart';
 
 import 'transport_screen.dart';
 import 'timetable_screen.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       HomeDestination.transport: const TransportScreen(),
       HomeDestination.timetable: const TimetableScreen(),
       HomeDestination.rideshare: const RideShareScreen(),
+      HomeDestination.ranking: const RankingScreen(),
     }[d]!;
     Navigator.of(context).push(_fade(page));
   }
@@ -628,6 +630,12 @@ class _ActionsList extends StatelessWidget {
         subtitle: 'Dodaj lub znajdź',
         dest: HomeDestination.rideshare,
       ),
+      const _CardData(
+        icon: Icons.emoji_events_rounded, // (ew. Icons.leaderboard_rounded)
+        title: 'Ranking',
+        subtitle: 'Kto oszczędza najwięcej CO₂',
+        dest: HomeDestination.ranking,
+      ),
     ];
 
     return GridView.builder(
@@ -798,7 +806,7 @@ PageRouteBuilder _fade(Widget page) => PageRouteBuilder(
       ),
     );
 
-enum HomeDestination { transport, timetable, rideshare }
+enum HomeDestination { transport, timetable, rideshare, ranking }
 
 class _CardData {
   final IconData icon;

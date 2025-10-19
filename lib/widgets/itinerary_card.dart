@@ -68,23 +68,6 @@ class ItineraryCard extends StatelessWidget {
                 )),
 
             const SizedBox(height: 4),
-
-            // Subtelna stopka informacyjna
-            Row(
-              children: [
-                Icon(Icons.info_outline,
-                    size: 16, color: theme.colorScheme.onSurfaceVariant),
-                const SizedBox(width: 6),
-                Expanded(
-                  child: Text(
-                    'Prototyp: trasy liczone po ulicach (OSRM). Ceny biletów szacunkowe.',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

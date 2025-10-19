@@ -19,26 +19,39 @@ class _MapPickScreenState extends State<MapPickScreen> {
   static const LatLng _plockCenter = LatLng(52.5468, 19.7064);
 
   final MapController _map = MapController();
+
+  // Punkty A/B
   LatLng? _start;
   LatLng? _end;
 
-  // Dane
+  // Dane surowe
   Map<String, List<LatLng>> _busLines = {};
   List<LatLng> _bikeStations = [];
-  List<LatLng> _busStopsExtra = []; // ⬅️ NOWE
-  double _maxBikeKm = 7.0; // startowa wartość, zsynchronizujemy z plannerem
+  List<LatLng> _busStopsExtra = [];
 
-  // Wynik
-  List<Polyline> _routeLines = [];
-  List<Marker> _routeMarkers = [];
-  List<StepItem> _itinerary = []; // ✅ właściwy typ
+  // Cache gotowych markerów — liczone RAZ po wczytaniu KML
+  List<Marker> _busLineMarkers = [];
+  List<Marker> _bikeMarkers = [];
+  List<Marker> _busStopsExtraMarkers = [];
 
+  // Konfiguracja
+  double _maxBikeKm = 7.0; // zsynchronizowane z plannerem
+  static const int _extraStopsZoomThreshold = 14;
+
+  // Widok/stan
+  double _currentZoom = 13;
   bool _loading = true;
   String? _error;
 
+  // Wynik planowania
+  List<Polyline> _routeLines = [];
+  List<Marker> _routeMarkers = [];
+  List<StepItem> _itinerary = [];
+
   // Loader i planer
   final _loader = KmlLoader();
-  final eco.EcoPlanner _planner = eco.EcoPlanner(); // ✅ pewny typ
+  final eco.EcoPlanner _planner = eco.EcoPlanner();
+
   @override
   void initState() {
     super.initState();
@@ -47,29 +60,81 @@ class _MapPickScreenState extends State<MapPickScreen> {
   }
 
   Future<void> _loadKml() async {
-    setState(() => _loading = true);
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+
     try {
       final data = await _loader.loadAll();
+
+      // Guard na wypadek zamkniętego ekranu
+      if (!mounted) return;
+
+      // Zapisz surowe
+      _busLines = data.busLines;
+      _bikeStations = data.bikeStations;
+      _busStopsExtra = data.allBusStopsExtra;
+
+      // Zbuduj markery RAZ (tu, poza buildem)
+      _busLineMarkers = _busLines.values
+          .expand((stops) => stops)
+          .map(
+            (p) => Marker(
+              point: p,
+              width: 16,
+              height: 16,
+              child: const Icon(Icons.directions_bus,
+                  size: 14, color: Colors.blueGrey),
+            ),
+          )
+          .toList();
+
+      _bikeMarkers = _bikeStations
+          .map(
+            (p) => Marker(
+              point: p,
+              width: 18,
+              height: 18,
+              child:
+                  const Icon(Icons.pedal_bike, size: 16, color: Colors.orange),
+            ),
+          )
+          .toList();
+
+      _busStopsExtraMarkers = _busStopsExtra
+          .map(
+            (p) => Marker(
+              point: p,
+              width: 12,
+              height: 12,
+              child: const Icon(Icons.directions_bus,
+                  size: 10, color: Colors.blueGrey),
+            ),
+          )
+          .toList();
+
       setState(() {
-        _busLines = data.busLines;
-        _bikeStations = data.bikeStations;
-        _busStopsExtra = data.allBusStopsExtra;
         _loading = false;
         _error = (_busLines.isEmpty && _bikeStations.isEmpty)
             ? 'Brak danych KML w assets/data/ i podkatalogach.'
             : null;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loading = false;
         _error = 'Błąd wczytywania KML: $e';
       });
     }
+
+    // Diagnostyka
+    // ignore: avoid_print
     print(
-        'Załadowano: linie=${_busLines.length}, stacje=${_bikeStations.length}');
+        'Załadowano: linie=${_busLines.length}, stacje=${_bikeStations.length}, extra=${_busStopsExtra.length}');
   }
 
-  // 🔹 Planowanie asynchroniczne (OSRM -> ulice)
+  // Asynchroniczne planowanie (np. OSRM)
   Future<void> _replan() async {
     if (_start == null || _end == null) return;
 
@@ -86,15 +151,18 @@ class _MapPickScreenState extends State<MapPickScreen> {
         busLines: _busLines,
       );
 
+      if (!mounted) return;
+
       setState(() {
         _routeLines = plan.polylines;
         _routeMarkers = plan.markers;
-        _itinerary = plan.steps; // ✅ List<StepItem>
+        _itinerary = plan.steps;
         _loading = false;
       });
 
       _fitToBounds(plan.allPoints());
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loading = false;
         _error = 'Błąd routingu: $e';
@@ -144,9 +212,9 @@ class _MapPickScreenState extends State<MapPickScreen> {
       } else {
         _start = latLng;
         _end = null;
-        _routeLines.clear();
-        _routeMarkers.clear();
-        _itinerary.clear();
+        _routeLines = [];
+        _routeMarkers = [];
+        _itinerary = [];
       }
     });
 
@@ -168,9 +236,10 @@ class _MapPickScreenState extends State<MapPickScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Maks. długość odcinka rowerem',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  const Text(
+                    'Maks. długość odcinka rowerem',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -203,7 +272,7 @@ class _MapPickScreenState extends State<MapPickScreen> {
                               _planner.setMaxBikeLegKm(_maxBikeKm);
                             });
                             if (_start != null && _end != null) {
-                              _replan(); // przelicz od razu
+                              _replan();
                             }
                           },
                         ),
@@ -221,65 +290,36 @@ class _MapPickScreenState extends State<MapPickScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final baseLayers = <Widget>[
+    // Warstwy mapy: wszystkie listy są już przygotowane wcześniej (cache)
+    final layers = <Widget>[
       TileLayer(
         urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
         userAgentPackageName: 'pl.twoja.aplikacja',
       ),
-      if (_busLines.isNotEmpty)
-        MarkerLayer(
-          markers: _busLines.values
-              .expand((stops) => stops)
-              .map((p) => Marker(
-                    point: p,
-                    width: 16,
-                    height: 16,
-                    child: const Icon(Icons.directions_bus,
-                        size: 14, color: Colors.blueGrey),
-                  ))
-              .toList(),
-        ),
-      if (_bikeStations.isNotEmpty)
-        MarkerLayer(
-          markers: _bikeStations
-              .map((p) => Marker(
-                    point: p,
-                    width: 18,
-                    height: 18,
-                    child: const Icon(Icons.pedal_bike,
-                        size: 16, color: Colors.orange),
-                  ))
-              .toList(),
-        ),
+
+      if (_busLineMarkers.isNotEmpty) MarkerLayer(markers: _busLineMarkers),
+      if (_bikeMarkers.isNotEmpty) MarkerLayer(markers: _bikeMarkers),
+
+      // Polilinie tras wynikowych
       if (_routeLines.isNotEmpty) PolylineLayer(polylines: _routeLines),
+
+      // Markery trasy (start, przesiadki, itd.)
       MarkerLayer(
-        markers: _routeMarkers.isNotEmpty ? _routeMarkers : _baseMarkers(),
-      ),
+          markers: _routeMarkers.isNotEmpty ? _routeMarkers : _baseMarkers()),
+
       const RichAttributionWidget(
         attributions: [TextSourceAttribution('© OpenStreetMap contributors')],
       ),
-      // …warstwa linii autobusowych z _busLines…
 
-      if (_busStopsExtra.isNotEmpty)
-        MarkerLayer(
-          markers: _busStopsExtra
-              .map((p) => Marker(
-                    point: p,
-                    width: 12,
-                    height: 12,
-                    child: const Icon(
-                      Icons.directions_bus, // możesz dać inny, np. Icons.circle
-                      size: 10,
-                      color: Colors.blueGrey, // delikatniej niż główne
-                    ),
-                  ))
-              .toList(),
-        ),
+      // Dodatkowe przystanki – pokaż dopiero od konkretnego zoomu
+      if (_busStopsExtraMarkers.isNotEmpty &&
+          _currentZoom >= _extraStopsZoomThreshold)
+        MarkerLayer(markers: _busStopsExtraMarkers),
     ];
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Planer A → B (eko priorytet)'),
+        title: const Text('EKO Planer Trasy'),
         actions: [
           IconButton(
             onPressed: _clear,
@@ -311,11 +351,20 @@ class _MapPickScreenState extends State<MapPickScreen> {
               initialCenter: _plockCenter,
               initialZoom: 13,
               onTap: _onTap,
+              // Aktualizuj zoom tylko po zakończonym ruchu, by ograniczyć rebuildy
+              onMapEvent: (ev) {
+                if (ev is MapEventMoveEnd) {
+                  final newZoom = _map.camera.zoom;
+                  if (newZoom != _currentZoom) {
+                    setState(() => _currentZoom = newZoom);
+                  }
+                }
+              },
               interactionOptions: const InteractionOptions(
                 flags: InteractiveFlag.all & ~InteractiveFlag.rotate,
               ),
             ),
-            children: baseLayers,
+            children: layers,
           ),
           if (_loading)
             const Positioned.fill(
@@ -334,8 +383,7 @@ class _MapPickScreenState extends State<MapPickScreen> {
                   child: Text(
                     _error!,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onErrorContainer,
-                    ),
+                        color: Theme.of(context).colorScheme.onErrorContainer),
                   ),
                 ),
               ),

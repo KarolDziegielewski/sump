@@ -270,7 +270,7 @@ class _TransportCard extends StatelessWidget {
   String _subtitleFor(TransportType type) {
     switch (type) {
       case TransportType.bike:
-        return 'Trasy i stacje rowerowe';
+        return 'Stacje rowerów miejskich';
       case TransportType.bus:
         return 'Linie, przystanki, odjazdy';
     }

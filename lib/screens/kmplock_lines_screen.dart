@@ -98,11 +98,11 @@ class _TicketStrip extends StatelessWidget {
               crossAxisAlignment: WrapCrossAlignment.center,
               children: const [
                 _TicketLogo(
-                  asset: 'assets/images/skycash_logo.png',
+                  asset: '../assets/images/skycash.png',
                   name: 'SkyCash',
                 ),
                 _TicketLogo(
-                  asset: 'assets/images/mobilet_logo.png',
+                  asset: '../assets/images/mobilet.svg',
                   name: 'moBILET',
                 ),
               ],

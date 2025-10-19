@@ -19,9 +19,15 @@ class _RideShareScreenState extends State<RideShareScreen> {
 
   // MVP: pamięciowa lista ogłoszeń
   final List<RideAd> _ads = [
-    RideAd(from: 'Wyszogrodzka', to: 'Radzanowo', seats: 2, note: 'Wyjazd 17:30'),
-    RideAd(from: 'Kobylińskiego', to: 'Stara Biała', seats: 1, note: 'Jutro rano'),
-    RideAd(from: 'Małachowskiego 1', to: 'Politechnika Warszawska' , seats: 3, note: 'Po pracy ~18:00'),
+    RideAd(
+        from: 'Wyszogrodzka', to: 'Radzanowo', seats: 2, note: 'Wyjazd 17:30'),
+    RideAd(
+        from: 'Kobylińskiego', to: 'Stara Biała', seats: 1, note: 'Jutro rano'),
+    RideAd(
+        from: 'Małachowskiego 1',
+        to: 'Politechnika Warszawska',
+        seats: 3,
+        note: 'Po pracy ~18:00'),
   ];
 
   @override
@@ -45,7 +51,8 @@ class _RideShareScreenState extends State<RideShareScreen> {
       return;
     }
     setState(() {
-      _ads.add(RideAd(from: from, to: to, seats: seats, note: _noteCtrl.text.trim()));
+      _ads.add(RideAd(
+          from: from, to: to, seats: seats, note: _noteCtrl.text.trim()));
       _fromCtrl.clear();
       _toCtrl.clear();
       _seatsCtrl.text = '1';
@@ -65,45 +72,58 @@ class _RideShareScreenState extends State<RideShareScreen> {
     }).toList();
 
     final leftForm = _GlassCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text('Dodaj ogłoszenie', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _fromCtrl,
-            decoration: const InputDecoration(labelText: 'Skąd jedziesz', border: OutlineInputBorder()),
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _toCtrl,
-            decoration: const InputDecoration(labelText: 'Dokąd jedziesz (miejsce docelowe)', border: OutlineInputBorder()),
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _seatsCtrl,
-            decoration: const InputDecoration(labelText: 'Liczba miejsc', border: OutlineInputBorder()),
-            keyboardType: TextInputType.number,
-            textInputAction: TextInputAction.next,
-          ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _noteCtrl,
-            decoration: const InputDecoration(labelText: 'Informacje (godzina, bagaż...)', border: OutlineInputBorder()),
-            maxLines: 2,
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            height: 48,
-            child: ElevatedButton.icon(
-              onPressed: _addAd,
-              icon: const Icon(Icons.add),
-              label: const Text('Dodaj ogłoszenie'),
+      child: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Dodaj ogłoszenie',
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w700)),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _fromCtrl,
+              decoration: const InputDecoration(
+                  labelText: 'Skąd jedziesz', border: OutlineInputBorder()),
+              textInputAction: TextInputAction.next,
             ),
-          ),
-        ],
+            const SizedBox(height: 12),
+            TextField(
+              controller: _toCtrl,
+              decoration: const InputDecoration(
+                  labelText: 'Dokąd jedziesz (miejsce docelowe)',
+                  border: OutlineInputBorder()),
+              textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _seatsCtrl,
+              decoration: const InputDecoration(
+                  labelText: 'Liczba miejsc', border: OutlineInputBorder()),
+              keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.next,
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _noteCtrl,
+              decoration: const InputDecoration(
+                  labelText: 'Informacje (godzina, bagaż...)',
+                  border: OutlineInputBorder()),
+              maxLines: 2,
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 48,
+              child: ElevatedButton.icon(
+                onPressed: _addAd,
+                icon: const Icon(Icons.add),
+                label: const Text('Dodaj ogłoszenie'),
+              ),
+            ),
+          ],
+        ),
       ),
     );
 
@@ -111,7 +131,11 @@ class _RideShareScreenState extends State<RideShareScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Ogłoszenia innych', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700)),
+          Text('Ogłoszenia innych',
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge
+                  ?.copyWith(fontWeight: FontWeight.w700)),
           const SizedBox(height: 12),
           TextField(
             controller: _filterCtrl,
@@ -126,7 +150,9 @@ class _RideShareScreenState extends State<RideShareScreen> {
           const SizedBox(height: 12),
           Expanded(
             child: filtered.isEmpty
-                ? Center(child: Text('Brak ogłoszeń dla podanego miejsca', style: TextStyle(color: cs.onSurfaceVariant)))
+                ? Center(
+                    child: Text('Brak ogłoszeń dla podanego miejsca',
+                        style: TextStyle(color: cs.onSurfaceVariant)))
                 : ListView.separated(
                     itemCount: filtered.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 8),
@@ -137,26 +163,44 @@ class _RideShareScreenState extends State<RideShareScreen> {
       ),
     );
 
+    // 2) Układ wąski – usuń sztywną wysokość listy
     return Scaffold(
-      appBar: AppBar(title: const Text('Wspólne przejazdy (BlaBlaCar)')),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: isWide
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(child: leftForm),
-                  const SizedBox(width: 20),
-                  Expanded(child: rightList),
-                ],
-              )
-            : Column(
-                children: [
-                  leftForm,
-                  const SizedBox(height: 20),
-                  SizedBox(height: 420, child: rightList),
-                ],
-              ),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            Image.asset(
+              'assets/images/blablacar.png',
+              height: 60, // dostosuj w razie potrzeby
+            ),
+            const SizedBox(width: 12),
+            const Text('     Wspólne przejazdy'),
+          ],
+        ),
+      ),
+
+      // opcjonalnie: resizeToAvoidBottomInset: true, // domyślnie true
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: isWide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: leftForm),
+                    const SizedBox(width: 20),
+                    Expanded(child: rightList),
+                  ],
+                )
+              : Column(
+                  children: [
+                    leftForm,
+                    const SizedBox(height: 20),
+                    Expanded(
+                        child:
+                            rightList), // <-- zamiast SizedBox(height: 420, ...)
+                  ],
+                ),
+        ),
       ),
     );
   }
@@ -167,7 +211,11 @@ class RideAd {
   final String to;
   final int seats;
   final String note;
-  RideAd({required this.from, required this.to, required this.seats, required this.note});
+  RideAd(
+      {required this.from,
+      required this.to,
+      required this.seats,
+      required this.note});
 }
 
 class _AdTile extends StatelessWidget {
@@ -191,7 +239,8 @@ class _AdTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${ad.from} → ${ad.to}', style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text('${ad.from} → ${ad.to}',
+                    style: const TextStyle(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(ad.note, style: TextStyle(color: cs.onSurfaceVariant)),
               ],
