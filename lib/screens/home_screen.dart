@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'transport_screen.dart';
 import 'timetable_screen.dart';
 import 'rideshare_screen.dart';
+import 'package:flutter/scheduler.dart' show Ticker;
 
 const _kBgImagePath = 'assets/images/nature.png';
 
@@ -110,30 +111,35 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
                   sliver: SliverList(
                     delegate: SliverChildListDelegate.fixed([
-                      // lekki kontener pod statystyki, żeby nie ginęły nad jasnym zdjęciem
+                      // Statystyki
                       const _InlineStats(),
                       const SizedBox(height: 14),
-
-                      // === PASEK PRZESUWNY NAD PRZYCISKAMI ===
                       RewardTickerBar(
                         items: const [
                           RewardTickerItem(
                             text: 'Odbierz przejazd autobusem za 20 punktów',
-                            asset: 'assets/icons/bus.png', // lub .svg
+                            icon: Icons.directions_bus_rounded,
                           ),
                           RewardTickerItem(
                             text: 'Odbierz przejazd rowerem za 10 punktów',
-                            asset: 'assets/icons/bike.svg', // lub .png
+                            icon: Icons.pedal_bike_rounded,
+                          ),
+                          RewardTickerItem(
+                            text: 'Odbierz przejazd hulajnogą za 15 punktów',
+                            icon: Icons.electric_scooter_rounded,
                           ),
                         ],
-                        height: 42, // dopasowane do „pilli”
-                        speed: 70, // prędkość przewijania w px/s
+                        height: 42, // wysokość paska
+                        gap: 24, // odstęp między elementami
+                        speed: 60, // px/s (zwiększ/zmniejsz wedle gustu)
+                        pauseOnTouch: true,
                       ),
+
                       const SizedBox(height: 12),
 
                       _ActionsList(onTap: _go),
                       const SizedBox(height: 16),
-                      const SizedBox(height: 16),
+                      const _EcoStrip(),
                     ]),
                   ),
                 ),
@@ -275,35 +281,33 @@ class _TitleBlock extends StatelessWidget {
 
 class _InlineStats extends StatelessWidget {
   const _InlineStats();
+
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final style = Theme.of(context).textTheme;
+
     return Container(
       decoration: BoxDecoration(
-        color: cs.surface.withOpacity(0.25), // delikatne tło pod pille
+        color: cs.surface.withOpacity(0.25),
         borderRadius: BorderRadius.circular(16),
       ),
       padding: const EdgeInsets.all(6),
       child: Row(
-        children: [
+        children: const [
           Expanded(
-            child: _Pill(
-              leading: const Icon(Icons.energy_savings_leaf_rounded, size: 18),
-              label: 'Punkty',
+            child: _StatPill(
+              icon: Icons.energy_savings_leaf_rounded,
               value: '14',
-              style: style,
-              cs: cs,
+              caption: 'punkty',
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: 8),
           Expanded(
-            child: _Pill(
-              leading: const Icon(Icons.air_rounded, size: 18),
-              label: ' CO₂',
+            child: _StatPill(
+              icon:
+                  Icons.co2_rounded, // jeśli brak w SDK, użyj Icons.air_rounded
               value: '17.6 kg',
-              style: style,
-              cs: cs,
+              caption: 'mniej emisji',
             ),
           ),
         ],
@@ -312,122 +316,287 @@ class _InlineStats extends StatelessWidget {
   }
 }
 
-class _Pill extends StatelessWidget {
-  const _Pill({
-    required this.leading,
-    required this.label,
+class _StatPill extends StatelessWidget {
+  const _StatPill({
+    super.key,
+    required this.icon,
     required this.value,
-    required this.style,
-    required this.cs,
+    required this.caption,
+    this.badge,
   });
-  final Widget leading;
-  final String label, value;
-  final TextTheme style;
-  final ColorScheme cs;
+
+  final IconData icon;
+  final String value; // duża, czytelna wartość
+  final String caption; // mały opis pod spodem
+  final String? badge; // np. "CO₂"
 
   @override
   Widget build(BuildContext context) {
-    final w = MediaQuery.of(context).size.width;
+    final cs = Theme.of(context).colorScheme;
+    final t = Theme.of(context).textTheme;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
           decoration: BoxDecoration(
-            // wyższa opacity → nie ginie na tle zdjęcia
             color: cs.surfaceContainerHigh.withOpacity(0.80),
           ),
-          child: w < 360
-              // NA BARDZO WĄSKICH: układ dwuwierszowy (label nad value) – zawsze czytelnie
-              ? Column(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: cs.primaryContainer,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(icon, size: 22, color: cs.onPrimaryContainer),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // duża, czytelna wartość — zawsze widoczna
+                    Text(
+                      value,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: t.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.1,
+                        shadows: const [
+                          Shadow(blurRadius: 3, offset: Offset(0, 1))
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    // mały opis + opcjonalna „badżetka” (np. CO₂)
                     Row(
                       children: [
-                        IconTheme.merge(
-                          data: const IconThemeData(size: 20),
-                          child: leading,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: FittedBox(
-                            alignment: Alignment.centerLeft,
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              label,
-                              maxLines: 1,
-                              softWrap: false,
-                              style: style.labelLarge?.copyWith(
-                                color: cs.onSurfaceVariant,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0.1,
-                                shadows: const [
-                                  Shadow(blurRadius: 3, offset: Offset(0, 1))
-                                ],
-                              ),
+                        Flexible(
+                          child: Text(
+                            caption,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: t.labelLarge?.copyWith(
+                              color: cs.onSurfaceVariant,
+                              fontWeight: FontWeight.w600,
+                              height: 1.15,
+                              letterSpacing: 0.1,
                             ),
                           ),
                         ),
+                        if (badge != null) ...[
+                          const SizedBox(width: 6),
+                          _Badge(text: badge!),
+                        ],
                       ],
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      value,
-                      style: style.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.1,
-                        shadows: const [
-                          Shadow(blurRadius: 3, offset: Offset(0, 1))
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-              // STANDARD: w jednym wierszu; label skaluje się, więc ZAWSZE się mieści
-              : Row(
-                  children: [
-                    IconTheme.merge(
-                      data: const IconThemeData(size: 20),
-                      child: leading,
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: FittedBox(
-                        alignment: Alignment.centerLeft,
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          label,
-                          maxLines: 1,
-                          softWrap: false,
-                          style: style.labelLarge?.copyWith(
-                            color: cs.onSurfaceVariant,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.1,
-                            shadows: const [
-                              Shadow(blurRadius: 3, offset: Offset(0, 1))
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      value,
-                      style: style.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.1,
-                        shadows: const [
-                          Shadow(blurRadius: 3, offset: Offset(0, 1))
-                        ],
-                      ),
                     ),
                   ],
                 ),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+}
+
+class _Badge extends StatelessWidget {
+  const _Badge({required this.text});
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: cs.primary.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        text,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: cs.primary,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.2,
+            ),
+      ),
+    );
+  }
+}
+
+// ————————————————— Pasek informacyjny —————————————————
+
+class RewardTickerItem {
+  final String text;
+  final IconData icon;
+  const RewardTickerItem({
+    required this.text,
+    required this.icon,
+  });
+}
+
+class RewardTickerBar extends StatefulWidget {
+  const RewardTickerBar({
+    super.key,
+    required this.items,
+    this.height = 40,
+    this.gap = 16,
+    this.speed = 50, // px na sekundę
+    this.pauseOnTouch = true,
+  });
+
+  final List<RewardTickerItem> items;
+  final double height;
+  final double gap;
+  final double speed;
+  final bool pauseOnTouch;
+
+  @override
+  State<RewardTickerBar> createState() => _RewardTickerBarState();
+}
+
+class _RewardTickerBarState extends State<RewardTickerBar>
+    with SingleTickerProviderStateMixin {
+  final _scrollCtrl = ScrollController();
+  final _firstRunKey = GlobalKey(); // mierzymy szerokość 1. sekwencji
+  late final Ticker _ticker;
+
+  double _singleWidth = 0; // szerokość pojedynczej sekwencji (items + gap)
+  double _offset = 0; // aktualny offset scrolla
+  Duration _last = Duration.zero;
+  bool _paused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _ticker = createTicker(_onTick);
+
+    // Zmierz po pierwszym renderze i odpal
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _measureAndStart();
+    });
+  }
+
+  void _measureAndStart() {
+    final ctx = _firstRunKey.currentContext;
+    final size = ctx?.size;
+    if (size == null) {
+      // Spróbuj w następnym frame, jeśli jeszcze nie zmierzone
+      WidgetsBinding.instance.addPostFrameCallback((_) => _measureAndStart());
+      return;
+    }
+
+    _singleWidth = size.width;
+    _offset = 0;
+    _last = Duration.zero;
+    if (!_ticker.isActive) _ticker.start();
+  }
+
+  void _onTick(Duration elapsed) {
+    if (!mounted || _paused || _singleWidth <= 0) return;
+
+    final dt = (elapsed - _last).inMicroseconds / 1e6; // sekundy
+    _last = elapsed;
+
+    _offset += widget.speed * dt;
+    if (_offset >= _singleWidth) {
+      _offset -= _singleWidth;
+    }
+
+    if (_scrollCtrl.hasClients) {
+      _scrollCtrl.jumpTo(_offset);
+    }
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final t = Theme.of(context).textTheme;
+
+    final children = widget.items
+        .map((e) => Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(e.icon, color: cs.primary, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  e.text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: t.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: cs.onSurface,
+                  ),
+                ),
+              ],
+            ))
+        .toList();
+
+    // Sekwencja do pomiaru (1x) + sekwencja duplikowana (2x) -> płynna pętla
+    final firstRun = Row(
+      key: _firstRunKey,
+      children: _interleave(children, SizedBox(width: widget.gap)),
+    );
+    final secondRun = Row(
+      children: _interleave(children, SizedBox(width: widget.gap)),
+    );
+
+    final content =
+        Row(children: [firstRun, SizedBox(width: widget.gap), secondRun]);
+
+    Widget strip = ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+        child: Container(
+          height: widget.height,
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: cs.surfaceContainerHigh.withOpacity(0.70),
+          ),
+          child: Listener(
+            onPointerDown: widget.pauseOnTouch ? (_) => _paused = true : null,
+            onPointerUp: widget.pauseOnTouch ? (_) => _paused = false : null,
+            child: SingleChildScrollView(
+              controller: _scrollCtrl,
+              scrollDirection: Axis.horizontal,
+              physics: const NeverScrollableScrollPhysics(),
+              child: content,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return strip;
+  }
+
+  // Wstawia separator między elementy (A sep B sep C)
+  List<Widget> _interleave(List<Widget> items, Widget sep) {
+    if (items.isEmpty) return const [];
+    final out = <Widget>[];
+    for (var i = 0; i < items.length; i++) {
+      out.add(items[i]);
+      if (i != items.length - 1) out.add(sep);
+    }
+    return out;
   }
 }
 
