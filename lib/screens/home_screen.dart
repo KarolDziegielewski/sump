@@ -113,6 +113,24 @@ class _HomeScreenState extends State<HomeScreen> {
                       // lekki kontener pod statystyki, żeby nie ginęły nad jasnym zdjęciem
                       const _InlineStats(),
                       const SizedBox(height: 14),
+
+                      // === PASEK PRZESUWNY NAD PRZYCISKAMI ===
+                      RewardTickerBar(
+                        items: const [
+                          RewardTickerItem(
+                            text: 'Odbierz przejazd autobusem za 20 punktów',
+                            asset: 'assets/icons/bus.png', // lub .svg
+                          ),
+                          RewardTickerItem(
+                            text: 'Odbierz przejazd rowerem za 10 punktów',
+                            asset: 'assets/icons/bike.svg', // lub .png
+                          ),
+                        ],
+                        height: 42, // dopasowane do „pilli”
+                        speed: 70,  // prędkość przewijania w px/s
+                      ),
+                      const SizedBox(height: 12),
+
                       _ActionsList(onTap: _go),
                       const SizedBox(height: 16),
                       const _EcoStrip(),
@@ -281,8 +299,8 @@ class _InlineStats extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: _Pill(
-              leading: const Icon(Icons.co2_rounded, size: 18),
-              label: 'Zaoszczędzone CO₂',
+              leading: const Icon(Icons.air_rounded, size: 18),
+              label: ' CO₂',
               value: '17.6 kg',
               style: style,
               cs: cs,
@@ -597,6 +615,171 @@ class _EcoStrip extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// === PASEK — definicje widgetów ===
+
+class RewardTickerItem {
+  final String text;
+  final String? asset;   // np. 'assets/icons/bus.png' lub 'assets/icons/bike.svg'
+  final double gap;      // odstęp między wpisami
+  const RewardTickerItem({required this.text, this.asset, this.gap = 48});
+}
+
+class RewardTickerBar extends StatefulWidget {
+  final List<RewardTickerItem> items;
+  final double height;
+  final double speed; // px/s
+
+  const RewardTickerBar({
+    super.key,
+    required this.items,
+    this.height = 40,
+    this.speed = 60,
+  });
+
+  @override
+  State<RewardTickerBar> createState() => _RewardTickerBarState();
+}
+
+class _RewardTickerBarState extends State<RewardTickerBar>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  final _contentKey = GlobalKey();
+  double _contentWidth = 0;
+
+@override
+void initState() {
+  super.initState();
+  _ctrl = AnimationController.unbounded(vsync: this)
+    ..addListener(() => setState(() {}))
+    // <= kluczowa zmiana: żadnych nieskończoności
+    ..repeat(min: 0.0, max: 1.0, period: const Duration(days: 1));
+}
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Precache obrazków rastrowych (SVG nie wspiera precacheImage)
+    for (final it in widget.items) {
+      final a = it.asset;
+      if (a == null) continue;
+      if (!a.toLowerCase().endsWith('.svg')) {
+        precacheImage(AssetImage(a), context);
+      }
+    }
+    // Poznaj szerokość zawartości po pierwszym kadrze
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final box = _contentKey.currentContext?.findRenderObject() as RenderBox?;
+      if (box != null && mounted) {
+        setState(() => _contentWidth = box.size.width);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final bg = cs.surfaceContainerHigh.withOpacity(0.80);
+    final border = cs.outlineVariant.withOpacity(0.35);
+
+    final tMs = _ctrl.lastElapsedDuration?.inMilliseconds ?? 0;
+    final offset =
+        _contentWidth == 0 ? 0.0 : ((tMs / 1000.0) * widget.speed) % _contentWidth;
+
+    Widget buildItemsRow() {
+      final ts = Theme.of(context).textTheme.labelLarge;
+      return Row(
+        key: _contentKey,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (final it in widget.items) ...[
+            Row(mainAxisSize: MainAxisSize.min, children: [
+              if (it.asset != null) ...[
+                _TickerIcon(asset: it.asset!),
+                const SizedBox(width: 8),
+              ],
+              Text(it.text, style: ts),
+            ]),
+            SizedBox(width: it.gap),
+          ],
+        ],
+      );
+    }
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          height: widget.height,
+          decoration: BoxDecoration(
+            color: bg,
+            border: Border.all(color: border),
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // delikatne wygaszenie brzegów
+              ShaderMask(
+                shaderCallback: (r) => const LinearGradient(
+                  colors: [Color(0x00000000), Color(0xFF000000), Color(0xFF000000), Color(0x00000000)],
+                  stops: [0.0, 0.08, 0.92, 1.0],
+                ).createShader(r),
+                blendMode: BlendMode.dstIn,
+                child: const SizedBox.expand(),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: LayoutBuilder(
+                  builder: (_, __) {
+                    if (_contentWidth == 0) {
+                      // pierwszy kadr, zanim poznamy szerokość treści
+                      return Align(
+                        alignment: Alignment.centerLeft,
+                        child: buildItemsRow(),
+                      );
+                    }
+                    // dwie kopie — ciągła pętla, brak przerw i nakładania
+                    return Stack(children: [
+                      Transform.translate(
+                        offset: Offset(-offset, 0),
+                        child: buildItemsRow(),
+                      ),
+                      Transform.translate(
+                        offset: Offset(_contentWidth - offset, 0),
+                        child: buildItemsRow(),
+                      ),
+                    ]);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _TickerIcon extends StatelessWidget {
+  final String asset;
+  const _TickerIcon({required this.asset});
+
+  @override
+  Widget build(BuildContext context) {
+    const size = 18.0;
+    if (asset.toLowerCase().endsWith('.svg')) {
+      return SvgPicture.asset(asset, width: size, height: size);
+    }
+    return Image.asset(asset, width: size, height: size, fit: BoxFit.contain);
   }
 }
 

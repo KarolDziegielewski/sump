@@ -18,8 +18,8 @@ class _BikeRouteScreenState extends State<BikeRouteScreen> {
   static const String _kmlAssetPath =
       'assets/data/PRM stacje roweru miejskiego.kml';
 
-  // ⬇️ ŚCIEŻKA DO GRAFIKI NA GUZIKU — podmień na swoją nazwę pliku w assets
-  static const String _cornerButtonImage = 'assets/images/logo_r.png';
+  // // ⬇️ ŚCIEŻKA DO GRAFIKI NA GUZIKU — podmień na swoją nazwę pliku w assets
+  // static const String _cornerButtonImage = 'assets/images/logo_r.png';
 
   final MapController _mapController = MapController();
   final List<Marker> _markers = [];
@@ -176,12 +176,12 @@ class _BikeRouteScreenState extends State<BikeRouteScreen> {
             ],
           ),
 
-          // ⬇️ Lewy dolny róg — przycisk bez akcji z Twoją grafiką
-          Positioned(
-            left: 16,
-            bottom: 16,
-            child: _CornerGraphicButton(imageAssetPath: _cornerButtonImage),
-          ),
+          // // ⬇️ Lewy dolny róg — przycisk bez akcji z Twoją grafiką
+          // Positioned(
+          //   left: 16,
+          //   bottom: 16,
+          //   child: _CornerGraphicButton(imageAssetPath: _cornerButtonImage),
+          // ),
 
           if (_loading)
             const Positioned.fill(
