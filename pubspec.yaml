@@ -31,7 +31,4 @@ flutter:
     - assets/data/
     - assets/data/sump/
     - assets/data/sump/kmplock/
-    - assets/images/skycash.png
-    - assets/images/mpay.svg
-    - assets/images/roovie.png
-    - assets/images/herb_plocka.svg
+    - assets/images/

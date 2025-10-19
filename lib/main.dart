@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'screens/home_screen.dart';
+import 'dart:ui';
 
-void main() => runApp(const MyApp());
+void main() {
+  FlutterError.onError = (details) {
+    FlutterError.presentError(details);
+  };
+  PlatformDispatcher.instance.onError = (error, stack) {
+    // pokaż błąd zamiast wyjścia z procesu
+    // (w debug zobaczysz go w konsoli)
+    // ignore: avoid_print
+    print('Uncaught: $error\n$stack');
+    return true;
+  };
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
