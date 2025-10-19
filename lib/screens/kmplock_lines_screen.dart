@@ -122,7 +122,7 @@ class _TicketLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double size = 30;
+    const double size = 70;
 
     Widget image;
     if (asset.toLowerCase().endsWith('.svg')) {
