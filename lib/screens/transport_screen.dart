@@ -330,8 +330,6 @@ class _TransportScreenState extends State<TransportScreen> {
               _buildHeader(context),
               const SizedBox(height: 14),
               _buildInputsCard(context),
-
-              // ——— WYNIK POD PRZYCISKAMI ———
               if (etaText != null || distText != null) ...[
                 const SizedBox(height: 12),
                 Wrap(

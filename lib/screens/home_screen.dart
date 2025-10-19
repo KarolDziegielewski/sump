@@ -1,10 +1,16 @@
-import 'dart:ui';
+// lib/screens/home_screen.dart — ultra-minimal + foto natury w tle (edge-to-edge)
+// Styl: nowoczesny, bez ramek, tonal surfaces + glass, czytelność dzięki overlayom.
+
+import 'dart:ui' show lerpDouble, ImageFilter;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:marquee/marquee.dart'; // ⬅️ nowy import
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'transport_screen.dart';
 import 'timetable_screen.dart';
 import 'rideshare_screen.dart';
+
+const _kBgImagePath = 'assets/images/nature.png';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,16 +18,15 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
-  late final AnimationController _bgCtrl = AnimationController(
-    vsync: this,
-    duration: const Duration(seconds: 18),
-  )..repeat();
-
-  @override
-  void dispose() {
-    _bgCtrl.dispose();
-    super.dispose();
+class _HomeScreenState extends State<HomeScreen> {
+  void _go(HomeDestination d) {
+    HapticFeedback.selectionClick();
+    final page = {
+      HomeDestination.transport: const TransportScreen(),
+      HomeDestination.timetable: const TimetableScreen(),
+      HomeDestination.rideshare: const RideShareScreen(),
+    }[d]!;
+    Navigator.of(context).push(_fade(page));
   }
 
   @override
@@ -29,161 +34,123 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      backgroundColor: cs.surface,
       body: Stack(
-        fit: StackFit.expand,
         children: [
-          // TŁO
-          AnimatedBuilder(
-            animation: _bgCtrl,
-            builder: (_, __) {
-              final t = _bgCtrl.value;
-              return CustomPaint(
-                painter: _BlobsPainter(
-                  cs.primary.withOpacity(0.22),
-                  cs.secondary.withOpacity(0.18),
-                  cs.tertiary.withOpacity(0.16),
-                  t,
+          // — TŁO: zdjęcie natury + scrim + miękki gradient dla czytelności typografii
+          const _HeroBackground(),
+
+          // — CONTENT
+          SafeArea(
+            top: false,
+            child: CustomScrollView(
+              physics: const BouncingScrollPhysics(),
+              slivers: [
+                // HEADER — duża typografia, szkło na przewinięciu
+                SliverAppBar(
+                  pinned: true,
+                  stretch: true,
+                  elevation: 0,
+                  scrolledUnderElevation: 0,
+                  expandedHeight: 260,
+                  backgroundColor: Colors.transparent,
+                  flexibleSpace: LayoutBuilder(
+                    builder: (context, c) {
+                      final h = c.biggest.height;
+                      final t = ((h - kToolbarHeight) / (260 - kToolbarHeight))
+                          .clamp(0.0, 1.0);
+                      final titleSize = lerpDouble(22, 34, t)!;
+                      final vis = Curves.easeOut.transform(t);
+
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          const _HeaderTopScrim(),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: _GlassBar(visible: vis < 0.35),
+                          ),
+                          Positioned(
+                            left: 20,
+                            bottom: 28,
+                            right: 20,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                AnimatedOpacity(
+                                  opacity: vis,
+                                  duration: const Duration(milliseconds: 180),
+                                  child: SvgPicture.asset(
+                                    'assets/images/herb_plocka.svg',
+                                    width: lerpDouble(36, 96, t)!,
+                                    height: lerpDouble(36, 96, t)!,
+                                    semanticsLabel: 'Herb Płocka',
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _TitleBlock(
+                                    title: 'Komunikacja w Płocku',
+                                    subtitle: 'DOKĄD DZIŚ JEDZIESZ?',
+                                    size: titleSize,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
                 ),
-              );
-            },
-          ),
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [cs.surface, cs.surface.withOpacity(0.6)],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
+
+                // CONTENT — zero ramek, glass/tonal surfaces
+                SliverPadding(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
+                  sliver: SliverList(
+                    delegate: SliverChildListDelegate.fixed([
+                      // lekki kontener pod statystyki, żeby nie ginęły nad jasnym zdjęciem
+                      const _InlineStats(),
+                      const SizedBox(height: 14),
+                      _ActionsList(onTap: _go),
+                      const SizedBox(height: 16),
+                      const _EcoStrip(),
+                    ]),
+                  ),
+                ),
+              ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
 
-          // TREŚĆ
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 12),
+// ————————————————— TŁO —————————————————
 
-                  // Nagłówek
-                  Text(
-                    'Płock – komunikacja',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: -0.2,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Wybierz jak chcesz zacząć',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // 🔹 DWA POLA INFORMACYJNE NA GÓRZE
-                  Row(
-                    children: const [
-                      Expanded(
-                        child: _StatTile(
-                          title: 'Twoje punkty:',
-                          value: '14',
-                        ),
-                      ),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: _StatTile(
-                          title: 'Zapobiegłeś produkcji takiej ilości CO₂:',
-                          value: '17.6kg',
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // 🔹 PASEK Z PRZEWIJAJĄCYM SIĘ TEKSTEM
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                      child: Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: cs.surface.withOpacity(0.6),
-                          border: Border.all(
-                              color: cs.outlineVariant.withOpacity(0.35)),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Marquee(
-                          text:
-                              '🎫 Odbierz darmowy bilet za 20 punktów     🚲 Przejedź się za darmo na rowerze za 10 punktów     ',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: cs.primary,
-                              ),
-                          blankSpace: 60,
-                          velocity: 45,
-                          pauseAfterRound: const Duration(seconds: 1),
-                          startPadding: 20,
-                          accelerationDuration: const Duration(seconds: 1),
-                          decelerationDuration:
-                              const Duration(milliseconds: 800),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const Spacer(),
-
-                  // 🔹 PRZYCISKI
-                  _BigChoiceCard(
-                    icon: Icons.alt_route_rounded,
-                    title: 'Planer Podróży',
-                    subtitle: 'Szybkie planowanie trasy',
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      Navigator.push(
-                        context,
-                        _fadeRoute(const TransportScreen()),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _BigChoiceCard(
-                    icon: Icons.schedule_rounded,
-                    title: 'Rozkłady jazdy',
-                    subtitle: 'Linie i przystanki w jednym miejscu',
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      Navigator.push(
-                        context,
-                        _fadeRoute(const TimetableScreen()),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  _BigChoiceCard(
-                    icon: Icons.directions_car_rounded,
-                    title: 'BlaBlaCar',
-                    subtitle: 'Dodaj lub znajdź wspólny przejazd',
-                    onTap: () {
-                      HapticFeedback.selectionClick();
-                      Navigator.push(
-                          context, _fadeRoute(const RideShareScreen()));
-                    },
-                  ),
-
-                  const Spacer(),
+class _HeroBackground extends StatelessWidget {
+  const _HeroBackground();
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return Positioned.fill(
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset(_kBgImagePath, fit: BoxFit.cover),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withOpacity(0.40), // mocniejszy top-scrim
+                  cs.surface.withOpacity(0.12),
+                  cs.surface.withOpacity(0.36),
                 ],
+                stops: const [0.0, 0.45, 1.0],
               ),
             ),
           ),
@@ -193,50 +160,41 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 }
 
-/// Prosta „glass” płytka ze statusem (tytuł + wartość)
-class _StatTile extends StatelessWidget {
-  final String title;
-  final String value;
-  const _StatTile({required this.title, required this.value});
+class _HeaderTopScrim extends StatelessWidget {
+  const _HeaderTopScrim();
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.black.withOpacity(0.35), Colors.transparent],
+        ),
+      ),
+    );
+  }
+}
 
+// ————————————————— UI atoms —————————————————
+
+class _GlassBar extends StatelessWidget {
+  const _GlassBar({required this.visible});
+  final bool visible;
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(16),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-          decoration: BoxDecoration(
-            color: cs.surface.withOpacity(0.6),
-            border: Border.all(color: cs.outlineVariant.withOpacity(0.35)),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: cs.primary.withOpacity(0.06),
-                blurRadius: 18,
-                offset: const Offset(0, 10),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        color: cs.onSurfaceVariant,
-                        fontWeight: FontWeight.w500,
-                      )),
-              const SizedBox(height: 6),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 0.2,
-                    ),
-              ),
-            ],
+    return AnimatedOpacity(
+      opacity: visible ? 1 : 0,
+      duration: const Duration(milliseconds: 200),
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+          child: Container(
+            height: 72,
+            decoration: BoxDecoration(
+              color: cs.surface.withOpacity(0.40), // półprzezroczysty glass
+            ),
           ),
         ),
       ),
@@ -244,110 +202,359 @@ class _StatTile extends StatelessWidget {
   }
 }
 
-// „Glass” karta z animacją Scale + Hover (desktop/web) + efekt blur
-class _BigChoiceCard extends StatefulWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
+class _TitleBlock extends StatelessWidget {
+  const _TitleBlock(
+      {required this.title, required this.subtitle, required this.size});
+  final String title, subtitle;
+  final double size;
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final t = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Tytuł skaluje się w dół, zamiast wychodzić poza ekran
+        FittedBox(
+          alignment: Alignment.centerLeft,
+          fit: BoxFit.scaleDown,
+          child: Text(
+            title,
+            maxLines: 1,
+            softWrap: false,
+            style: t.titleLarge?.copyWith(
+              fontSize: size,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.2,
+              shadows: const [Shadow(blurRadius: 6, offset: Offset(0, 2))],
+            ),
+          ),
+        ),
+        const SizedBox(height: 6),
+        Opacity(
+          opacity: 0.9,
+          child: FittedBox(
+            alignment: Alignment.centerLeft,
+            fit: BoxFit.scaleDown,
+            child: Text(
+              subtitle,
+              maxLines: 1,
+              softWrap: false,
+              style: t.labelLarge?.copyWith(
+                color: cs.onSurface,
+                letterSpacing: 1.1,
+                fontWeight: FontWeight.w600,
+                shadows: const [Shadow(blurRadius: 5, offset: Offset(0, 1))],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
-  const _BigChoiceCard({
+class _InlineStats extends StatelessWidget {
+  const _InlineStats();
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final style = Theme.of(context).textTheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: cs.surface.withOpacity(0.25), // delikatne tło pod pille
+        borderRadius: BorderRadius.circular(16),
+      ),
+      padding: const EdgeInsets.all(6),
+      child: Row(
+        children: [
+          Expanded(
+            child: _Pill(
+              leading: const Icon(Icons.energy_savings_leaf_rounded, size: 18),
+              label: 'Punkty',
+              value: '14',
+              style: style,
+              cs: cs,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _Pill(
+              leading: const Icon(Icons.co2_rounded, size: 18),
+              label: 'Zaoszczędzone CO₂',
+              value: '17.6 kg',
+              style: style,
+              cs: cs,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Pill extends StatelessWidget {
+  const _Pill({
+    required this.leading,
+    required this.label,
+    required this.value,
+    required this.style,
+    required this.cs,
+  });
+  final Widget leading;
+  final String label, value;
+  final TextTheme style;
+  final ColorScheme cs;
+
+  @override
+  Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            // wyższa opacity → nie ginie na tle zdjęcia
+            color: cs.surfaceContainerHigh.withOpacity(0.80),
+          ),
+          child: w < 360
+              // NA BARDZO WĄSKICH: układ dwuwierszowy (label nad value) – zawsze czytelnie
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        IconTheme.merge(
+                          data: const IconThemeData(size: 20),
+                          child: leading,
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              label,
+                              maxLines: 1,
+                              softWrap: false,
+                              style: style.labelLarge?.copyWith(
+                                color: cs.onSurfaceVariant,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.1,
+                                shadows: const [
+                                  Shadow(blurRadius: 3, offset: Offset(0, 1))
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      value,
+                      style: style.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.1,
+                        shadows: const [
+                          Shadow(blurRadius: 3, offset: Offset(0, 1))
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              // STANDARD: w jednym wierszu; label skaluje się, więc ZAWSZE się mieści
+              : Row(
+                  children: [
+                    IconTheme.merge(
+                      data: const IconThemeData(size: 20),
+                      child: leading,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: FittedBox(
+                        alignment: Alignment.centerLeft,
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          label,
+                          maxLines: 1,
+                          softWrap: false,
+                          style: style.labelLarge?.copyWith(
+                            color: cs.onSurfaceVariant,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.1,
+                            shadows: const [
+                              Shadow(blurRadius: 3, offset: Offset(0, 1))
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      value,
+                      style: style.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: 0.1,
+                        shadows: const [
+                          Shadow(blurRadius: 3, offset: Offset(0, 1))
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionsList extends StatelessWidget {
+  const _ActionsList({required this.onTap});
+  final ValueChanged<HomeDestination> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final w = MediaQuery.of(context).size.width;
+    final cols = w >= 900 ? 3 : (w >= 600 ? 2 : 1);
+
+    const items = [
+      _CardData(
+        icon: Icons.alt_route_rounded,
+        title: 'Planer podróży',
+        subtitle: 'Najszybsza trasa',
+        dest: HomeDestination.transport,
+      ),
+      _CardData(
+        icon: Icons.schedule_rounded,
+        title: 'Rozkłady jazdy',
+        subtitle: 'Linie i przystanki',
+        dest: HomeDestination.timetable,
+      ),
+      _CardData(
+        icon: Icons.groups_2_rounded,
+        title: 'Wspólne przejazdy',
+        subtitle: 'Dodaj lub znajdź',
+        dest: HomeDestination.rideshare,
+      ),
+    ];
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: items.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: cols,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 12,
+        childAspectRatio: 19 / 9,
+      ),
+      itemBuilder: (context, i) {
+        final it = items[i];
+        return _ActionTile(
+          icon: it.icon,
+          title: it.title,
+          subtitle: it.subtitle,
+          onTap: () => onTap(it.dest),
+        );
+      },
+    );
+  }
+}
+
+class _ActionTile extends StatefulWidget {
+  const _ActionTile({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
   });
+  final IconData icon;
+  final String title, subtitle;
+  final VoidCallback onTap;
 
   @override
-  State<_BigChoiceCard> createState() => _BigChoiceCardState();
+  State<_ActionTile> createState() => _ActionTileState();
 }
 
-class _BigChoiceCardState extends State<_BigChoiceCard> {
-  bool _hover = false;
+class _ActionTileState extends State<_ActionTile> {
   bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final scale = _pressed ? 0.98 : (_hover ? 1.01 : 1.0);
+    final t = Theme.of(context).textTheme;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hover = true),
-      onExit: (_) => setState(() => _hover = false),
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _pressed = true),
-        onTapCancel: () => setState(() => _pressed = false),
-        onTapUp: (_) => setState(() => _pressed = false),
-        onTap: widget.onTap,
-        child: AnimatedScale(
-          scale: scale,
-          duration: const Duration(milliseconds: 120),
-          curve: Curves.easeOutCubic,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(22),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+    return AnimatedScale(
+      scale: _pressed ? 0.985 : 1,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeOut,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+          child: Material(
+            color: cs.surfaceContainerHigh.withOpacity(0.78),
+            child: InkWell(
+              onTap: widget.onTap,
+              onHighlightChanged: (v) => setState(() => _pressed = v),
+              borderRadius: BorderRadius.circular(20),
+              splashColor: cs.primary.withOpacity(0.08),
+              highlightColor: cs.primary.withOpacity(0.05),
               child: Container(
+                constraints: const BoxConstraints(minHeight: 72),
                 padding:
-                    const EdgeInsets.symmetric(vertical: 22, horizontal: 18),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(22),
-                  color: cs.surface.withOpacity(0.6),
-                  border: Border.all(
-                    color: cs.outlineVariant.withOpacity(0.35),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: cs.primary.withOpacity(0.08),
-                      blurRadius: 30,
-                      spreadRadius: 0,
-                      offset: const Offset(0, 18),
-                    ),
-                  ],
-                ),
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
                 child: Row(
                   children: [
                     Container(
-                      width: 56,
-                      height: 56,
+                      width: 44,
+                      height: 44,
                       decoration: BoxDecoration(
+                        color: cs.primaryContainer,
                         shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [
-                            cs.primaryContainer,
-                            cs.primary.withOpacity(0.6)
-                          ],
-                        ),
                       ),
-                      child: Icon(widget.icon,
-                          size: 28, color: cs.onPrimaryContainer),
+                      child: Icon(
+                        widget.icon,
+                        size: 22,
+                        color: cs.onPrimaryContainer,
+                      ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: 12),
                     Expanded(
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.title,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                  )),
-                          const SizedBox(height: 4),
-                          Text(widget.subtitle,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(
-                                    color: cs.onSurfaceVariant,
-                                  )),
+                          Text(
+                            widget.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: t.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.1,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            widget.subtitle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: t.bodyMedium?.copyWith(
+                              color: cs.onSurfaceVariant,
+                              letterSpacing: 0.1,
+                            ),
+                          ),
                         ],
                       ),
                     ),
+                    const SizedBox(width: 8),
                     Icon(Icons.arrow_forward_rounded,
-                        color: cs.onSurfaceVariant),
+                        size: 20, color: cs.onSurfaceVariant),
                   ],
                 ),
               ),
@@ -359,43 +566,61 @@ class _BigChoiceCardState extends State<_BigChoiceCard> {
   }
 }
 
-// Fade route (ładne przejście)
-PageRouteBuilder _fadeRoute(Widget page) => PageRouteBuilder(
-      transitionDuration: const Duration(milliseconds: 260),
-      reverseTransitionDuration: const Duration(milliseconds: 220),
+class _EcoStrip extends StatelessWidget {
+  const _EcoStrip();
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration:
+              BoxDecoration(color: cs.primaryContainer.withOpacity(0.18)),
+          child: Row(
+            children: [
+              const Icon(Icons.eco_rounded),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  'Jedź z nami — mniej korków, mniej emisji, więcej punktów. 🌿',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ————————————————— Nawigacja & modele —————————————————
+PageRouteBuilder _fade(Widget page) => PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 220),
+      reverseTransitionDuration: const Duration(milliseconds: 180),
       pageBuilder: (_, __, ___) => page,
-      transitionsBuilder: (_, animation, __, child) => FadeTransition(
-        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+      transitionsBuilder: (_, a, __, child) => FadeTransition(
+        opacity: CurvedAnimation(parent: a, curve: Curves.easeOutCubic),
         child: child,
       ),
     );
 
-// Painter blobów w tle
-class _BlobsPainter extends CustomPainter {
-  final Color a, b, c;
-  final double t;
-  _BlobsPainter(this.a, this.b, this.c, this.t);
+enum HomeDestination { transport, timetable, rideshare }
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width, h = size.height;
-    void blob(Color color, double r, Offset center) {
-      final paint = Paint()..color = color;
-      canvas.drawCircle(center, r, paint);
-    }
-
-    blob(a, w * 0.35,
-        Offset(w * (0.25 + 0.05 * _s(1.0 * t)), h * (0.25 + 0.04 * _s(1.4 * t))));
-    blob(b, w * 0.40,
-        Offset(w * (0.8 + 0.04 * _s(0.8 * t)), h * (0.28 + 0.05 * _s(1.2 * t))));
-    blob(c, w * 0.32,
-        Offset(w * (0.55 + 0.05 * _s(1.3 * t)), h * (0.78 + 0.04 * _s(0.9 * t))));
-  }
-
-  double _s(double x) =>
-      (Tween(begin: -1.0, end: 1.0).transform((x % 1))).abs() * 2 - 1;
-
-  @override
-  bool shouldRepaint(covariant _BlobsPainter old) =>
-      old.t != t || old.a != a || old.b != b || old.c != c;
+class _CardData {
+  final IconData icon;
+  final String title, subtitle;
+  final HomeDestination dest;
+  const _CardData({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.dest,
+  });
 }
