@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../data/km_timetables.dart'; // ← tu jest kmTimetables
 import 'timetable_details_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class KmplockLinesScreen extends StatelessWidget {
   const KmplockLinesScreen({super.key, required this.query});
@@ -96,14 +97,14 @@ class _TicketStrip extends StatelessWidget {
               alignment: WrapAlignment.end,
               spacing: 10,
               crossAxisAlignment: WrapCrossAlignment.center,
-              children: const [
-                _TicketLogo(
-                  asset: '../assets/images/skycash.png',
-                  name: 'SkyCash',
+              children: [
+                const _TicketLogo(
+                  // to może zostać const, bo używa PNG
+                  asset: 'assets/images/skycash.png',
                 ),
                 _TicketLogo(
-                  asset: '../assets/images/mobilet.svg',
-                  name: 'moBILET',
+                  // NIE const, bo w środku będzie SvgPicture.asset
+                  asset: 'assets/images/mobilet.png',
                 ),
               ],
             ),
@@ -115,23 +116,38 @@ class _TicketStrip extends StatelessWidget {
 }
 
 class _TicketLogo extends StatelessWidget {
-  const _TicketLogo({required this.asset, required this.name});
   final String asset;
-  final String name;
+
+  const _TicketLogo({required this.asset});
 
   @override
   Widget build(BuildContext context) {
+    const double size = 30;
+
+    Widget image;
+    if (asset.toLowerCase().endsWith('.svg')) {
+      image = SvgPicture.asset(
+        asset,
+        width: size,
+        height: size,
+        placeholderBuilder: (_) =>
+            const SizedBox(width: size, height: size, child: Icon(Icons.image)),
+      );
+    } else {
+      image = Image.asset(
+        asset,
+        width: size,
+        height: size,
+        errorBuilder: (_, __, ___) =>
+            const SizedBox(width: size, height: size, child: Icon(Icons.image)),
+      );
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Image.asset(asset, height: 18, fit: BoxFit.contain),
+        image,
         const SizedBox(width: 6),
-        Text(
-          name,
-          style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-        ),
       ],
     );
   }
