@@ -173,7 +173,7 @@ class _RideShareScreenState extends State<RideShareScreen> {
               height: 60, // dostosuj w razie potrzeby
             ),
             const SizedBox(width: 12),
-            const Text('     Wspólne przejazdy'),
+            const Text('Wspólne przejazdy'),
           ],
         ),
       ),
